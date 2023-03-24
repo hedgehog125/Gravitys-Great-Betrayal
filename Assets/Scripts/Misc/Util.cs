@@ -9,8 +9,11 @@ public static class Util {
 		if (value > 0) return Mathf.Min(value, max);
 		else return -Mathf.Min(-value, max);
 	}
+	public static Vector3 LimitXZ(Vector3 vec, float limit) {
+		Vector2 vec2 = new(vec.x, vec.z);
+		if (vec2.magnitude > limit) vec2 = vec2.normalized * limit;
 
-	//public static Vector3 AdjustForGravity() { // Adjust it so gravity is always "down"
-
-	//}
+		Debug.Log(vec2.magnitude);
+		return new Vector3(vec2.x, vec.y, vec2.y);
+	}
 }

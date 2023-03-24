@@ -50,8 +50,7 @@ namespace Player {
 			}
 		}
 		private void CapVelocity(ref Vector3 vel) {
-			vel.x = Util.AbsMax(vel.x, m_moveData.maxSpeed);
-			vel.z = Util.AbsMax(vel.z, m_moveData.maxSpeed);
+			vel = Util.LimitXZ(vel, m_moveData.maxSpeed);
 		}
 
 		private void GravityTick(ref Vector3 vel) {
