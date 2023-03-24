@@ -1,0 +1,2 @@
+= Images =
+GravityEffector editor script icon based on: https://pictogrammers.com/library/mdi/icon/arrow-all/ by Austin Andrews under Apache 2.0
