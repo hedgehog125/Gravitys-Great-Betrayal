@@ -13,7 +13,6 @@ public static class Util {
 		Vector2 vec2 = new(vec.x, vec.z);
 		if (vec2.magnitude > limit) vec2 = vec2.normalized * limit;
 
-		Debug.Log(vec2.magnitude);
 		return new Vector3(vec2.x, vec.y, vec2.y);
 	}
 }
