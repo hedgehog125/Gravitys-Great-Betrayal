@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.UI.Image;
 
 namespace Player {
 	public class Gravity : MonoBehaviour {
@@ -17,7 +18,7 @@ namespace Player {
 			new(0, 0, 1), // Away
 			new(0, 0, -1) // Towards
 		};
-		[HideInInspector] public static readonly float AmountPerTick = Physics.gravity.y / 50;
+		[HideInInspector] public static readonly float AmountPerTick = Physics.gravity.y / 50; // Negative
 
 		[HideInInspector] public LayerMask Layer { get; private set; }
 		[HideInInspector] public Vector3 AccelerationPerTick { get; private set; }
@@ -43,17 +44,16 @@ namespace Player {
 		};
 		private static readonly int[][] ADJUSTED_TO_DIRECTIONS = CalculateInvertDirections(DIRECTIONS_TO_ADJUSTED);
 
-		public Gravity() {
-			ChangeDirection(0);
-		}
 		private void Awake() {
+			ChangeDirection(1);
+
 			Layer = m_areaObject.layer;
 			Globals.CurrentGravityController = this;
 		}
 
 		public void ChangeDirection(int _direction) {
 			Direction = _direction;
-			AccelerationPerTick = (Vector3)Directions[Direction] * AmountPerTick;
+			AccelerationPerTick = (Vector3)Directions[Direction] * -AmountPerTick;
 		}
 
 		// These can be done in different ways, but it doesn't matter as long as it can be reversed. e.g rotating from upwards gravity to downwards gravity can be done by rotating on 2 different axes (but not both)
@@ -79,8 +79,9 @@ namespace Player {
 			for (int i = 0; i < toAdjusted.Length; i++) {
 				int[] toDirection = new int[3];
 				for (int c = 0; c < 3; c++) {
-					int newIndex = toAdjusted[i][c];
-					if (Mathf.Abs(newIndex) - 1 != c) { // Only flip the sign if it gets moved
+					int newIndex = toAdjusted[i][c]; // 1 based
+					int absIndex = Mathf.Abs(newIndex) - 1; // 0 based
+					if (absIndex != c) { // Only flip the sign if it gets moved
 						newIndex *= -1;
 					}
 
@@ -112,6 +113,14 @@ namespace Player {
 		private void Tests() {
 			Debug.Log("Testing");
 
+			{
+				Vector3 adjusted = AdjustFromDirection(new Vector3(0, -2, 0), 1);
+				Vector3Int rounded = new(Mathf.RoundToInt(adjusted.x), Mathf.RoundToInt(adjusted.y), Mathf.RoundToInt(adjusted.z));
+
+				if (rounded != new Vector3Int(0, 2, 0)) {
+					throw new System.Exception($"Upside down test failed. {adjusted} should be {{ 0, 2, 0 }}.");
+				}
+			}
 			for (int i = 0; i < 6; i++) {
 				TestAdjustAndApply(new Vector3(1, 2, 3), i);
 			}
@@ -121,7 +130,7 @@ namespace Player {
 			Vector3 convertedBack = ApplyToDirection(adjusted, directionID);
 
 			if (convertedBack != original) {
-				throw new System.Exception($"Direction: {directionID}, {convertedBack} doesn't match expected {original}");
+				throw new System.Exception($"Test failed. Direction: {directionID}, {convertedBack} doesn't match expected {original}");
 			}
 		}
 		#endregion

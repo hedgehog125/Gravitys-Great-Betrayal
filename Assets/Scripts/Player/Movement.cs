@@ -25,15 +25,14 @@ namespace Player {
 		}
 
 		private void FixedUpdate() {
-			Vector3 gravity = Physics.gravity;
-			Vector3 vel = rb.velocity;
+			Vector3 vel = Globals.CurrentGravityController.Adjust(rb.velocity);
 
 			MoveTick(ref vel);
 			JumpTick(ref vel);
 			CapVelocity(ref vel);
 
 			GravityTick(ref vel);
-			rb.velocity = vel;
+			rb.velocity = Globals.CurrentGravityController.Apply(vel);
 		}
 
 
@@ -54,7 +53,7 @@ namespace Player {
 		}
 
 		private void GravityTick(ref Vector3 vel) {
-			vel += Globals.CurrentGravityController.AccelerationPerTick;
+			vel.y += Gravity.AmountPerTick;
 		}
 	}
 }
