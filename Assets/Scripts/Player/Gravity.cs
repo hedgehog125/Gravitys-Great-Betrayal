@@ -36,16 +36,16 @@ namespace Player {
 		*/
 		private static readonly int[][] DIRECTIONS_TO_ADJUSTED = {
 			new int[] { 1, 2, 3 }, // Down, so no changes
-			new int[] { -1, -2, 3 }, // Up
-			new int[] { -2, 1, 3 }, // Left
-			new int[] { 2, -1, 3 }, // Right
-			new int[] { 1, -3, 2 }, // Away
+			new int[] { 1, -2, 3 }, // Up
+			new int[] { 2, 1, 3 }, // Left
+			new int[] { -2, 1, 3 }, // Right
+			new int[] { 1, 3, 2 }, // Away
 			new int[] { 1, 3, -2 } // Towards
 		};
 		private static readonly int[][] ADJUSTED_TO_DIRECTIONS = CalculateInvertDirections(DIRECTIONS_TO_ADJUSTED);
 
 		private void Awake() {
-			ChangeDirection(1);
+			ChangeDirection(2);
 
 			Layer = m_areaObject.layer;
 			Globals.CurrentGravityController = this;
