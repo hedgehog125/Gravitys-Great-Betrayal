@@ -1,7 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEngine.UI.Image;
 
 namespace Player {
 	public class Gravity : MonoBehaviour {
@@ -39,13 +39,13 @@ namespace Player {
 			new int[] { 1, -2, 3 }, // Up
 			new int[] { 2, 1, 3 }, // Left
 			new int[] { -2, 1, 3 }, // Right
-			new int[] { 1, 3, 2 }, // Away
-			new int[] { 1, 3, -2 } // Towards
+			new int[] { 1, 3, -2 }, // Away
+			new int[] { 1, 3, 2 } // Towards
 		};
 		private static readonly int[][] ADJUSTED_TO_DIRECTIONS = CalculateInvertDirections(DIRECTIONS_TO_ADJUSTED);
 
 		private void Awake() {
-			ChangeDirection(2);
+			ChangeDirection(5);
 
 			Layer = m_areaObject.layer;
 			Globals.CurrentGravityController = this;
@@ -77,16 +77,33 @@ namespace Player {
 			int[][] toDirections = new int[toAdjusted.Length][];
 
 			for (int i = 0; i < toAdjusted.Length; i++) {
-				int[] toDirection = new int[3];
-				for (int c = 0; c < 3; c++) {
-					int newIndex = toAdjusted[i][c]; // 1 based
-					int absIndex = Mathf.Abs(newIndex) - 1; // 0 based
-					if (absIndex != c) { // Only flip the sign if it gets moved
-						newIndex *= -1;
+				int[] toDirection = (int[])toAdjusted[i].Clone();
+				int[] swappedPair; // 1 based so it can keep the signs
+				/*
+				 * The one that stays the same is the only one that can't be used for this, so just use the second if the first is that one.
+				 * It'll be avoided if the first one changes, as it'll be paired with another that changes
+				*/
+				{
+					int firstPairedWith = Mathf.Abs(toAdjusted[i][0]);
+					if (firstPairedWith == 1) {
+						int secondPairedWith = Mathf.Abs(toAdjusted[i][1]);
+						int IdOfFirstInPair = toAdjusted[i][secondPairedWith - 1];
+						// These will both be the same if nothing's swapped in this, so the invert will correctly be the same as the original conversion
+						swappedPair = new int[2] { IdOfFirstInPair, toAdjusted[i][1] };
 					}
-
-					toDirection[c] = newIndex;
+					else {
+						int IdOfFirstInPair = toAdjusted[i][firstPairedWith - 1]; // It'll be 1 or -1, look it up using the second item in the pair
+						swappedPair = new int[2] { IdOfFirstInPair, toAdjusted[i][0] };
+					}
 				}
+
+				bool isFirstAboveZero = swappedPair[0] > 0;
+				bool isSecondAboveZero = swappedPair[1] > 0;
+				if (isFirstAboveZero != isSecondAboveZero) { // Only swap the signs if the signs are different
+					toDirection[Mathf.Abs(swappedPair[0]) - 1] *= -1;
+					toDirection[Mathf.Abs(swappedPair[1]) - 1] *= -1;
+				}
+
 
 				toDirections[i] = toDirection;
 			}
