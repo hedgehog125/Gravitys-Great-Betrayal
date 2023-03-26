@@ -45,7 +45,7 @@ namespace Player {
 		private static readonly int[][] ADJUSTED_TO_DIRECTIONS = CalculateInvertDirections(DIRECTIONS_TO_ADJUSTED);
 
 		private void Awake() {
-			ChangeDirection(2);
+			ChangeDirection(0);
 
 			Layer = m_areaObject.layer;
 			Globals.CurrentGravityController = this;
