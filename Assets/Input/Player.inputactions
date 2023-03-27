@@ -31,6 +31,15 @@
                     "processors": "InvertVector2(invertX=false)",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "SwitchGravity",
+                    "type": "Value",
+                    "id": "304a4fb3-2669-4687-af4a-f875381cfb36",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -141,6 +150,28 @@
                     "processors": "",
                     "groups": "Controller",
                     "action": "Look",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "00521a8e-97f0-41ab-aa6b-e8fb6b454034",
+                    "path": "<Keyboard>/shift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "SwitchGravity",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6459d495-cce4-4e39-8e80-d546847dccf9",
+                    "path": "<Gamepad>/rightTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Controller",
+                    "action": "SwitchGravity",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

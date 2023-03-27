@@ -38,7 +38,7 @@ namespace Player {
 			new int[] { 1, 2, 3 }, // Down, so no changes
 			new int[] { 1, -2, 3 }, // Up
 			new int[] { 2, -1, 3 }, // Left
-			new int[] { -2, -1, 3 }, // Right
+			new int[] { -2, 1, 3 }, // Right
 			new int[] { 1, 3, -2 }, // Away
 			new int[] { 1, 3, 2 } // Towards
 		};

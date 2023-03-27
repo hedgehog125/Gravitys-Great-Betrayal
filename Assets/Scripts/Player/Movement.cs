@@ -15,6 +15,10 @@ namespace Player {
 		private void OnJump(InputValue input) {
 			jumpInput = input.isPressed;
 		}
+		private bool switchGravityInput;
+		private void OnSwitchGravity(InputValue input) {
+			switchGravityInput = input.isPressed;
+		}
 
 
 		private Rigidbody rb;
@@ -53,6 +57,11 @@ namespace Player {
 		}
 
 		private void GravityTick(ref Vector3 vel) {
+			if (switchGravityInput) {
+				Globals.CurrentGravityController.ChangeDirection(Random.Range(0, 6));
+				switchGravityInput = false;
+			}
+
 			vel.y += Gravity.AmountPerTick;
 		}
 	}
