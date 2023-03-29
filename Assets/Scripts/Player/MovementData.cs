@@ -11,8 +11,9 @@ namespace Player {
 
 		[Header("Jumping")]
 		public float jumpPower;
+		public LayerMask jumpLayer;
 
 		[Header("Misc")]
-		public LayerMask jumpLayer;
+		public float topDownThreshold;
 	}
 }

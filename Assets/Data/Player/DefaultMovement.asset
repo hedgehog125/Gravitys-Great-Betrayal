@@ -18,3 +18,4 @@ MonoBehaviour:
   jumpLayer:
     serializedVersion: 2
     m_Bits: 0
+  topDownThreshold: 0.1
