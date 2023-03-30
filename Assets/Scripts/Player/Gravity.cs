@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Player {
 	public class Gravity : MonoBehaviour {
@@ -43,6 +44,7 @@ namespace Player {
 			new int[] { 1, 3, 2 } // Towards
 		};
 		private static readonly int[][] ADJUSTED_TO_DIRECTIONS = CalculateInvertDirections(DIRECTIONS_TO_ADJUSTED);
+		private UnityEvent gravityChangeEvent = new(); 
 
 		private void Awake() {
 			ChangeDirection(0);
@@ -51,9 +53,18 @@ namespace Player {
 			Globals.CurrentGravityController = this;
 		}
 
+		#region Public methods
+		public void Listen(UnityAction callback) {
+			gravityChangeEvent.AddListener(callback);
+		}
 		public void ChangeDirection(int _direction) {
+			int oldDirection = Direction;
 			Direction = _direction;
 			AccelerationPerTick = (Vector3)Directions[Direction] * -AmountPerTick;
+
+			if (Direction != oldDirection) {
+				gravityChangeEvent.Invoke();
+			}
 		}
 
 		// These can be done in different ways, but it doesn't matter as long as it can be reversed. e.g rotating from upwards gravity to downwards gravity can be done by rotating on 2 different axes (but not both)
@@ -69,6 +80,7 @@ namespace Player {
 		public static Vector3 ApplyToDirection(Vector3 original, int targetDirectionID) {
 			return AdjustOrApply(original, targetDirectionID, true);
 		}
+		#endregion
 
 
 		// To convert from an adjusted back to a direction, just do the same method but flip the signs on the constants if they're a different index to that one.
@@ -127,6 +139,7 @@ namespace Player {
 
 
 		#region Tests
+		#if UNITY_EDITOR
 		private void Tests() {
 			Debug.Log("Testing");
 
@@ -150,6 +163,7 @@ namespace Player {
 				throw new System.Exception($"Test failed. Direction: {directionID}, {convertedBack} doesn't match expected {original}");
 			}
 		}
+		#endif
 		#endregion
 	}
 }

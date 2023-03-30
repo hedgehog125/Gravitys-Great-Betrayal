@@ -59,14 +59,9 @@ namespace Player {
 			}
 
 			float inputAngle = Mathf.Atan2(moveInput.x, moveInput.y); // In radians
-			{ // Rotate the forward direction in 2D around 0,0
-				float sin = -Mathf.Sin(inputAngle);
-				float cos = Mathf.Cos(inputAngle);
-				float x = moveDirection.x;
-				float z = moveDirection.z;
-
-				moveDirection.x = (x * cos) - (z * sin);
-				moveDirection.z = (z * cos) - (x * sin);
+			{
+				Vector2 asVec2 = Util.RotateAroundOrigin(new Vector2(moveDirection.x, moveDirection.z), inputAngle);
+				moveDirection = new Vector3(asVec2.x, 0, asVec2.y);
 			}
 
 			vel += moveDirection * (moveAmount * m_moveData.acceleration);
@@ -89,5 +84,34 @@ namespace Player {
 
 			vel.y += Gravity.AmountPerTick;
 		}
+
+		#region Tests
+		#if UNITY_EDITOR
+		private void Tests() {
+			Debug.Log("Testing");
+
+			TestRotateAndReverseBatch(new Vector2(0, 1));
+			TestRotateAndReverseBatch(new Vector2(0.71f, -0.71f));
+		}
+		private void TestRotateAndReverseBatch(Vector2 point) {
+			TestRotateAndReverse(point, 0);
+			TestRotateAndReverse(point, 90);
+			TestRotateAndReverse(point, 180);
+			TestRotateAndReverse(point, -90);
+			TestRotateAndReverse(point, 45);
+			TestRotateAndReverse(point, -135);
+			TestRotateAndReverse(point, -45);
+		}
+		private void TestRotateAndReverse(Vector2 point, float deg) {
+			float rad = deg * Mathf.Deg2Rad;
+			Vector2 rotated = Util.RotateAroundOrigin(point, rad);
+			Vector2 rotatedBack = Util.RotateAroundOrigin(rotated, -rad);
+
+			if (rotatedBack != point) {
+				throw new System.Exception($"Test failed. Angle (in degrees): {deg}, {rotatedBack} doesn't match expected {point}. Rotated: {rotated}.");
+			}
+		}
+		#endif
+		#endregion
 	}
 }
