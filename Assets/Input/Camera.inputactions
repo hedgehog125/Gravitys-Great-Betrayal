@@ -10,7 +10,7 @@
                     "type": "Value",
                     "id": "db6417cc-8306-492b-b644-3df23c5ed4ca",
                     "expectedControlType": "Vector2",
-                    "processors": "InvertVector2(invertX=false)",
+                    "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
                 }
@@ -21,7 +21,7 @@
                     "id": "5ee2378c-1e71-4af2-a827-277d73516a50",
                     "path": "<Pointer>/delta",
                     "interactions": "",
-                    "processors": "",
+                    "processors": "ScaleVector2(x=0.075,y=0.075)",
                     "groups": "Keyboard",
                     "action": "Look",
                     "isComposite": false,
@@ -32,7 +32,7 @@
                     "id": "940da95d-a1bf-4bc4-b190-dc6e4cebf032",
                     "path": "<Gamepad>/rightStick",
                     "interactions": "",
-                    "processors": "",
+                    "processors": "StickDeadzone",
                     "groups": "Controller",
                     "action": "Look",
                     "isComposite": false,

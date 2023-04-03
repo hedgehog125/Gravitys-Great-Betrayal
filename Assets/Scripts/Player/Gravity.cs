@@ -24,6 +24,7 @@ namespace Player {
 		[HideInInspector] public LayerMask Layer { get; private set; }
 		[HideInInspector] public Vector3 AccelerationPerTick { get; private set; }
 		[HideInInspector] public int Direction;
+		[HideInInspector] public Vector3 Down;
 		#endregion
 
 
@@ -44,7 +45,7 @@ namespace Player {
 			new int[] { 1, 3, 2 } // Towards
 		};
 		private static readonly int[][] ADJUSTED_TO_DIRECTIONS = CalculateInvertDirections(DIRECTIONS_TO_ADJUSTED);
-		private UnityEvent gravityChangeEvent = new(); 
+		private readonly UnityEvent gravityChangeEvent = new(); 
 
 		private void Awake() {
 			ChangeDirection(0);
@@ -61,6 +62,7 @@ namespace Player {
 			int oldDirection = Direction;
 			Direction = _direction;
 			AccelerationPerTick = (Vector3)Directions[Direction] * -AmountPerTick;
+			Down = Apply(Vector3.down);
 
 			if (Direction != oldDirection) {
 				gravityChangeEvent.Invoke();

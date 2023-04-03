@@ -58,8 +58,9 @@ GameObject:
   - component: {fileID: 1864248190455188298}
   - component: {fileID: 1864248190455188301}
   - component: {fileID: 1864248190455188299}
-  - component: {fileID: 1864248190455188288}
   - component: {fileID: 1864248190455188300}
+  - component: {fileID: 1864248190455188288}
+  - component: {fileID: 8810031581548172875}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -154,19 +155,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_areaObject: {fileID: 1864248190208493990}
   Direction: 0
---- !u!135 &1864248190455188288
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1864248190455188291}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.4
-  m_Center: {x: 0, y: 0, z: 0}
+  Down: {x: 0, y: 0, z: 0}
 --- !u!54 &1864248190455188300
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -183,6 +172,38 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 112
   m_CollisionDetection: 2
+--- !u!135 &1864248190455188288
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1864248190455188291}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.4
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &8810031581548172875
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1864248190455188291}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9f5fae7eefd2a54583b6261857fde05, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_preventWallFriction: 1
+  m_manageByScript: 0
+  m_frictionlessMaterial: {fileID: 13400000, guid: cdad22c94d114b94fbab0e7748aac0a9,
+    type: 2}
+  m_groundLayers:
+    serializedVersion: 2
+    m_Bits: 641
 --- !u!1 &1864248191466291007
 GameObject:
   m_ObjectHideFlags: 0
