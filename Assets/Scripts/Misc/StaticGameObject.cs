@@ -8,8 +8,10 @@ public class StaticGameObject : MonoBehaviour {
 	[SerializeField] private bool m_bakedShadows = true;
 	[SerializeField] private bool m_realtimeShadows = false;
 
-	private void Awake() {
+	private void Awake() { // Only runs in play mode
+		#if UNITY_EDITOR
 		if (! EditorApplication.isPlayingOrWillChangePlaymode) return;
+		#endif
 
 		Renderer ren = GetComponent<Renderer>();
 		ren.shadowCastingMode = m_realtimeShadows? UnityEngine.Rendering.ShadowCastingMode.On : UnityEngine.Rendering.ShadowCastingMode.Off;

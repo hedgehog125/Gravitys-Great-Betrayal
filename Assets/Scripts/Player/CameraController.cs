@@ -11,8 +11,8 @@ namespace Player {
 			Cursor.lockState = CursorLockMode.Locked;
 		}
 		private void Start() {
-			m_defaultVCam.Follow = Globals.CurrentPlayerObject.transform;
-			m_defaultVCam.LookAt = Globals.CurrentPlayerObject.transform;
+			m_defaultVCam.Follow = Globals.CurrentPlayer.transform;
+			m_defaultVCam.LookAt = Globals.CurrentPlayer.transform;
 		}
 	}
 }
