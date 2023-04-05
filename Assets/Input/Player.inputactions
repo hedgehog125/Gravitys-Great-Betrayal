@@ -147,7 +147,7 @@
                     "id": "940da95d-a1bf-4bc4-b190-dc6e4cebf032",
                     "path": "<Gamepad>/rightStick",
                     "interactions": "",
-                    "processors": "StickDeadzone",
+                    "processors": "StickDeadzone,AdjustForDeltaTime",
                     "groups": "Controller",
                     "action": "Look",
                     "isComposite": false,
