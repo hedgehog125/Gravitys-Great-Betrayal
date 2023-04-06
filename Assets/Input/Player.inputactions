@@ -24,9 +24,18 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Look",
+                    "name": "ScaledLook",
                     "type": "Value",
                     "id": "db6417cc-8306-492b-b644-3df23c5ed4ca",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "UnscaledLook",
+                    "type": "Value",
+                    "id": "281472fd-2cbc-4773-a561-7efa91938fc0",
                     "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": "",
@@ -138,18 +147,7 @@
                     "interactions": "",
                     "processors": "ScaleVector2(x=0.075,y=0.075)",
                     "groups": "Keyboard",
-                    "action": "Look",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "940da95d-a1bf-4bc4-b190-dc6e4cebf032",
-                    "path": "<Gamepad>/rightStick",
-                    "interactions": "",
-                    "processors": "StickDeadzone,AdjustForDeltaTime",
-                    "groups": "Controller",
-                    "action": "Look",
+                    "action": "ScaledLook",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -172,6 +170,17 @@
                     "processors": "",
                     "groups": "Controller",
                     "action": "SwitchGravity",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "56f56065-8e4e-407e-894c-691e5017b0fe",
+                    "path": "<Gamepad>/rightStick",
+                    "interactions": "",
+                    "processors": "StickDeadzone",
+                    "groups": "Controller",
+                    "action": "UnscaledLook",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

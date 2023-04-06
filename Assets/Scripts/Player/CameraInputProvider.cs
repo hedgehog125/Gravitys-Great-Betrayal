@@ -6,9 +6,11 @@ using static Cinemachine.AxisState;
 
 namespace Player {
 	public class CameraInputProvider : MonoBehaviour, IInputAxisProvider {
-		private Vector2 lookInput;
+		private Vector2 scaledLookInput;
+		private Vector2 unscaledLookInput;
 		private void OnLook() {
-			lookInput = Globals.CurrentPlayer.LookInput;
+			scaledLookInput = Globals.CurrentPlayer.ScaledLookInput;
+			unscaledLookInput = Globals.CurrentPlayer.UnscaledLookInput;
 		}
 
 		private void Start() {
@@ -16,8 +18,10 @@ namespace Player {
 		}
 
 		public virtual float GetAxisValue(int axis) {
-			if (axis == 0) return lookInput.x;
-			else if (axis == 1) return lookInput.y;
+			Vector2 input = scaledLookInput + (unscaledLookInput * (Time.deltaTime * 50));
+
+			if (axis == 0) return input.x;
+			else if (axis == 1) return input.y;
 			else return 0;
 		}
 	}
