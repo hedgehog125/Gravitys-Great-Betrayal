@@ -20,7 +20,7 @@ namespace Player {
 			switchGravityInput = input.isPressed;
 		}
 
-		private Vector3 ADJUSTED_FORWARD = new(0, 0, 1);
+		private static Vector3 ADJUSTED_FORWARD = new(0, 0, 1);
 
 		private Rigidbody rb;
 		private Camera cam;

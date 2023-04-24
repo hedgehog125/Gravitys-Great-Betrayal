@@ -145,7 +145,7 @@
                     "id": "5ee2378c-1e71-4af2-a827-277d73516a50",
                     "path": "<Pointer>/delta",
                     "interactions": "",
-                    "processors": "ScaleVector2(x=0.075,y=0.075)",
+                    "processors": "ScaleVector2(x=0.05,y=0.05)",
                     "groups": "Keyboard",
                     "action": "ScaledLook",
                     "isComposite": false,

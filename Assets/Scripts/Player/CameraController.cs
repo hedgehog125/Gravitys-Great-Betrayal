@@ -10,12 +10,18 @@ namespace Player {
 
 		private void Awake() {
 			Cursor.lockState = CursorLockMode.Locked;
-
-			m_cameraUpController.Up = new Vector3(0, -1, 0);
 		}
 		private void Start() {
-			m_defaultVCam.Follow = Globals.CurrentPlayer.transform;
-			m_defaultVCam.LookAt = Globals.CurrentPlayer.transform;
+			Transform target = Globals.CurrentPlayer.VisibleController.transform;
+			m_defaultVCam.Follow = target;
+			m_defaultVCam.LookAt = target;
+
+			Globals.CurrentGravityController.Listen(OnGravityChange);
+			OnGravityChange();
+		}
+
+		private void OnGravityChange() {
+			m_cameraUpController.Up = Globals.CurrentGravityController.Apply(new Vector3(0, 1, 0));
 		}
 	}
 }

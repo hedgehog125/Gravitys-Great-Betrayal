@@ -19,6 +19,14 @@ namespace Player {
 			new(0, 0, 1), // Away
 			new(0, 0, -1) // Towards
 		};
+		public static readonly Vector3[] Rotations = {
+			new(0, 0, 0),
+			new(180, 0, 0),
+			new(0, 0, -90),
+			new(0, 0, 90),
+			new(-90, 0, 0),
+			new(90, 0, 0)
+		};
 		[HideInInspector] public static readonly float AmountPerTick = Physics.gravity.y / 50; // Negative
 
 		[HideInInspector] public LayerMask Layer { get; private set; }
@@ -38,11 +46,11 @@ namespace Player {
 		*/
 		private static readonly int[][] DIRECTIONS_TO_ADJUSTED = {
 			new int[] { 1, 2, 3 }, // Down, so no changes
-			new int[] { 1, -2, 3 }, // Up
+			new int[] { 1, -2, -3 }, // Up
 			new int[] { 2, -1, 3 }, // Left
 			new int[] { -2, 1, 3 }, // Right
 			new int[] { 1, 3, -2 }, // Away
-			new int[] { 1, 3, 2 } // Towards
+			new int[] { -1, 3, 2 } // Towards
 		};
 		private static readonly int[][] ADJUSTED_TO_DIRECTIONS = CalculateInvertDirections(DIRECTIONS_TO_ADJUSTED);
 		private readonly UnityEvent gravityChangeEvent = new(); 
@@ -61,7 +69,7 @@ namespace Player {
 		public void ChangeDirection(int _direction) {
 			int oldDirection = Direction;
 			Direction = _direction;
-			AccelerationPerTick = (Vector3)Directions[Direction] * -AmountPerTick;
+			AccelerationPerTick = (Vector3)Directions[Direction] * -AmountPerTick; // AmountPerTick is negative
 			Down = Apply(Vector3.down);
 
 			if (Direction != oldDirection) {
