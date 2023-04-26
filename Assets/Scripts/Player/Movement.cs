@@ -1,3 +1,4 @@
+using PhysicsTools;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,7 +6,11 @@ using UnityEngine.InputSystem;
 
 namespace Player { 
 	public class Movement : MonoBehaviour {
+		private static Vector3 ADJUSTED_FORWARD = new(0, 0, 1);
+
+
 		[SerializeField] private MovementData m_moveData;
+
 
 		private Vector2 moveInput;
 		private void OnMove(InputValue input) {
@@ -20,17 +25,23 @@ namespace Player {
 			switchGravityInput = input.isPressed;
 		}
 
-		private static Vector3 ADJUSTED_FORWARD = new(0, 0, 1);
+		private Util.GroundDetector groundDetector;
 
 		private Rigidbody rb;
+		private FrictionEffector frictionEffector;
 		private Camera cam;
 		private void Awake() {
 			rb = GetComponent<Rigidbody>();
+			frictionEffector = GetComponent<FrictionEffector>();
 			cam = Camera.main;
+
+			Collider col = GetComponent<Collider>();
+			groundDetector = new(col.bounds.size.y, m_moveData.jumpLayer);
 		}
 
 		private void FixedUpdate() {
 			Vector3 vel = Globals.CurrentGravityController.Adjust(rb.velocity);
+			bool onGround = groundDetector.Check(transform.position);
 
 			MoveTick(ref vel);
 			JumpTick(ref vel);
@@ -38,6 +49,8 @@ namespace Player {
 
 			GravityTick(ref vel);
 			rb.velocity = Globals.CurrentGravityController.Apply(vel);
+
+			frictionEffector.Tick(onGround);
 		}
 
 

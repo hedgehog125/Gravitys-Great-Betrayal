@@ -27,4 +27,20 @@ public static class Util {
 		);
 		return newPoint;
 	}
+
+	public class GroundDetector {
+		private const float MARGIN = 0.05f;
+
+		private Vector3 raycastOriginOffset;
+		private LayerMask groundLayers;
+
+		public GroundDetector(float height, LayerMask groundLayers) {
+			raycastOriginOffset = new(0, -((height / 2) - (MARGIN / 2)), 0);
+			this.groundLayers = groundLayers;
+		}
+
+		public bool Check(Vector3 pos) {
+			return Physics.Raycast(pos + Globals.CurrentGravityController.Apply(raycastOriginOffset), Globals.CurrentGravityController.Down, MARGIN, groundLayers);
+		}
+	}
 }

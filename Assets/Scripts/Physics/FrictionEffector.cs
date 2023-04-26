@@ -4,27 +4,30 @@ using UnityEngine;
 
 namespace PhysicsTools {
 	public class FrictionEffector : MonoBehaviour {
-		private const float MARGIN = 0.05f;
-
 		[SerializeField] private bool m_preventWallFriction = true;
 		[SerializeField] private bool m_manageByScript = false;
 		[SerializeField] private PhysicMaterial m_frictionlessMaterial;
 		[SerializeField] private LayerMask m_groundLayers;
 
-		private Vector3 raycastOriginOffset;
 		private PhysicMaterial frictionMaterial;
+		private Util.GroundDetector groundDetector;
 
 		private Collider col;
 		private void Awake() {
 			col = GetComponent<Collider>();
 
-			raycastOriginOffset = new(0, -((col.bounds.size.y / 2) - (MARGIN / 2)), 0);
 			frictionMaterial = col.material;
+			if (! m_manageByScript) groundDetector = new(col.bounds.size.y, m_groundLayers);
 		}
 
 		private void FixedUpdate() {
+			if (! m_manageByScript) {
+				Tick(groundDetector.Check(transform.position));
+			}
+		}
+
+		public void Tick(bool onGround) {
 			if (m_preventWallFriction) {
-				bool onGround = Physics.Raycast(transform.position + Globals.CurrentGravityController.Apply(raycastOriginOffset), Globals.CurrentGravityController.Down, MARGIN, m_groundLayers);
 				if (onGround) {
 					col.material = frictionMaterial;
 				}
@@ -32,6 +35,6 @@ namespace PhysicsTools {
 					col.material = m_frictionlessMaterial;
 				}
 			}
-		}
+		} 
 	}
 }

@@ -199,12 +199,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_preventWallFriction: 1
-  m_manageByScript: 0
+  m_manageByScript: 1
   m_frictionlessMaterial: {fileID: 13400000, guid: cdad22c94d114b94fbab0e7748aac0a9,
     type: 2}
   m_groundLayers:
     serializedVersion: 2
-    m_Bits: 641
+    m_Bits: 0
 --- !u!1 &1864248191466291007
 GameObject:
   m_ObjectHideFlags: 0
@@ -251,6 +251,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5baeb75a9cf9a484f8b372850eac6fdd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_transparentCameraDistance: 2.5
 --- !u!33 &1864248191466291002
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -279,7 +280,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 3cd892842ad973240acc6423ab0df225, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
