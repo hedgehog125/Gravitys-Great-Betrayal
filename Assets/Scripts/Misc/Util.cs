@@ -29,18 +29,27 @@ public static class Util {
 	}
 
 	public class GroundDetector {
-		private const float MARGIN = 0.05f;
+		private const float OFFSET = 0.01f;
+		private const float HIT_DISTANCE = 0.025f;
 
 		private Vector3 raycastOriginOffset;
 		private LayerMask groundLayers;
+		private float maxDistance;
 
-		public GroundDetector(float height, LayerMask groundLayers) {
-			raycastOriginOffset = new(0, -((height / 2) - (MARGIN / 2)), 0);
+		public GroundDetector(float height, LayerMask groundLayers, float maxDistance = HIT_DISTANCE) {
+			raycastOriginOffset = new(0, -(height / 2) + OFFSET, 0);
 			this.groundLayers = groundLayers;
+			this.maxDistance = maxDistance;
 		}
 
+		public bool Check(Vector3 pos, out float distance) {
+			bool didHit = Physics.Raycast(pos + Globals.CurrentGravityController.Apply(raycastOriginOffset), Globals.CurrentGravityController.Down, out RaycastHit hit, maxDistance, groundLayers);
+			distance = didHit? Mathf.Max(hit.distance - OFFSET, 0) : Mathf.Infinity;
+
+			return didHit && hit.distance < HIT_DISTANCE;
+		}
 		public bool Check(Vector3 pos) {
-			return Physics.Raycast(pos + Globals.CurrentGravityController.Apply(raycastOriginOffset), Globals.CurrentGravityController.Down, MARGIN, groundLayers);
+			return Check(pos, out float _);
 		}
 	}
 }

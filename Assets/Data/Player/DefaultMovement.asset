@@ -17,5 +17,12 @@ MonoBehaviour:
   jumpPower: 5
   jumpLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 641
+  nearGroundDistance: 0.25
+  maxJumpBufferTime: 7
+  maxJumpBufferVelocity: 0.1
+  maxMidairJumps: 1
+  midairJumpPower: 5
+  maxJumpHoldTime: 7
+  jumpHoldCurveSteepness: 2
   topDownThreshold: 0.1

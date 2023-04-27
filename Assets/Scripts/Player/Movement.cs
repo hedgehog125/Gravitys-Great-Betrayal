@@ -19,6 +19,7 @@ namespace Player {
 		private bool jumpInput;
 		private void OnJump(InputValue input) {
 			jumpInput = input.isPressed;
+			bufferedJumpInput = jumpInput;
 		}
 		private bool switchGravityInput;
 		private void OnSwitchGravity(InputValue input) {
@@ -26,6 +27,11 @@ namespace Player {
 		}
 
 		private Util.GroundDetector groundDetector;
+		private int jumpBufferTick = -1;
+		private bool bufferedJumpInput; // Like jumpInput but it's not set to false when a jump is first buffered
+		private int jumpHoldTick = -1;
+		private int midairJumpCount;
+
 
 		private Rigidbody rb;
 		private FrictionEffector frictionEffector;
@@ -36,15 +42,16 @@ namespace Player {
 			cam = Camera.main;
 
 			Collider col = GetComponent<Collider>();
-			groundDetector = new(col.bounds.size.y, m_moveData.jumpLayer);
+			groundDetector = new(col.bounds.size.y, m_moveData.jumpLayer, m_moveData.nearGroundDistance);
 		}
 
 		private void FixedUpdate() {
 			Vector3 vel = Globals.CurrentGravityController.Adjust(rb.velocity);
-			bool onGround = groundDetector.Check(transform.position);
+			bool onGround = groundDetector.Check(transform.position, out float groundDistance);
+			bool nearGround = groundDistance < m_moveData.nearGroundDistance;
 
 			MoveTick(ref vel);
-			JumpTick(ref vel);
+			JumpTick(ref vel, onGround, nearGround);
 			CapVelocity(ref vel);
 
 			GravityTick(ref vel);
@@ -79,12 +86,64 @@ namespace Player {
 
 			vel += moveDirection * (moveAmount * m_moveData.acceleration);
 		}
-		private void JumpTick(ref Vector3 vel) {
-			if (jumpInput) {
-				vel.y += m_moveData.jumpPower;
-				jumpInput = false;
+		private void JumpTick(ref Vector3 vel, bool onGround, bool nearGround) {
+			if (onGround) {
+				midairJumpCount = 0;
+			}
+
+			bool jumpBuffered = false;
+			if (jumpBufferTick != -1) {
+				if (jumpBufferTick == m_moveData.maxJumpBufferTime) {
+					jumpBufferTick = -1;
+				}
+				else {
+					jumpBuffered = true;
+					jumpBufferTick++;
+				}
+			}
+
+			if (jumpHoldTick == -1) {
+				if (jumpInput || jumpBuffered) {
+					bool canMidairJump = midairJumpCount < m_moveData.maxMidairJumps;
+
+					if (onGround) {
+						if (vel.y < 0) vel.y = 0;
+						jumpHoldTick = 0;
+						jumpBufferTick = -1;
+
+						ActiveJumpTick(ref vel);
+					}
+					else if (nearGround && vel.y < m_moveData.maxJumpBufferVelocity) {
+						jumpBufferTick = 0;
+					}
+					else if (canMidairJump) {
+						if (vel.y < 0) vel.y = 0;
+						vel.y += m_moveData.midairJumpPower;
+
+						midairJumpCount++;
+						jumpBufferTick = -1;
+						// jumpHoldTick isn't reset so the player can still get that height
+					}
+					jumpInput = false;
+				}
+			}
+			else {
+				if (jumpHoldTick == m_moveData.maxJumpHoldTime || bufferedJumpInput) { // bufferedJumpInput is dropped in less situations
+					jumpHoldTick = -1;
+					if (! jumpInput) bufferedJumpInput = false;
+				}
+				else {
+					ActiveJumpTick(ref vel);
+					jumpHoldTick++;
+				}
 			}
 		}
+		private void ActiveJumpTick(ref Vector3 vel) {
+			float adjustedForHoldTime = 1 / (Mathf.Sqrt(jumpHoldTick * m_moveData.jumpHoldCurveSteepness) + 1);
+			float multiplierFromSpeed = 1;
+			vel.y += m_moveData.jumpPower * adjustedForHoldTime * multiplierFromSpeed;
+		}
+
 		private void CapVelocity(ref Vector3 vel) {
 			vel = Util.LimitXZ(vel, m_moveData.maxSpeed);
 		}
