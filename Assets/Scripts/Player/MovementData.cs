@@ -23,6 +23,9 @@ namespace Player {
 		public int maxJumpHoldTime;
 		public float jumpHoldCurveSteepness;
 
+		public float maxJumpSpeedIncrease;
+		public float speedForMaxJumpSpeedIncrease; // The speed needed to get the maximum increase due to speed
+
 		[Header("Misc")]
 		public float topDownThreshold;
 	}

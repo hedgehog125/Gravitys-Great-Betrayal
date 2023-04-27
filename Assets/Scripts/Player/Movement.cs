@@ -140,7 +140,9 @@ namespace Player {
 		}
 		private void ActiveJumpTick(ref Vector3 vel) {
 			float adjustedForHoldTime = 1 / (Mathf.Sqrt(jumpHoldTick * m_moveData.jumpHoldCurveSteepness) + 1);
-			float multiplierFromSpeed = 1;
+
+			Vector2 speed2 = new(vel.x, vel.z);
+			float multiplierFromSpeed = ;
 			vel.y += m_moveData.jumpPower * adjustedForHoldTime * multiplierFromSpeed;
 		}
 
