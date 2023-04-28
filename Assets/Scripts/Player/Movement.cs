@@ -113,8 +113,8 @@ namespace Player {
 
 						ActiveJumpTick(ref vel);
 					}
-					else if (nearGround && vel.y < m_moveData.maxJumpBufferVelocity) {
-						jumpBufferTick = 0;
+					else if ((nearGround || (! canMidairJump)) && vel.y < m_moveData.maxJumpBufferVelocity) {
+						jumpBufferTick = 0; // Buffer the jump
 					}
 					else if (canMidairJump) {
 						if (vel.y < 0) vel.y = 0;
@@ -128,22 +128,22 @@ namespace Player {
 				}
 			}
 			else {
-				if (jumpHoldTick == m_moveData.maxJumpHoldTime || bufferedJumpInput) { // bufferedJumpInput is dropped in less situations
+				if (jumpHoldTick == m_moveData.maxJumpHoldTime || (! bufferedJumpInput)) { // bufferedJumpInput is dropped in less situations
 					jumpHoldTick = -1;
 					if (! jumpInput) bufferedJumpInput = false;
 				}
 				else {
-					ActiveJumpTick(ref vel);
 					jumpHoldTick++;
+					ActiveJumpTick(ref vel);
 				}
 			}
 		}
 		private void ActiveJumpTick(ref Vector3 vel) {
-			float adjustedForHoldTime = 1 / (Mathf.Sqrt(jumpHoldTick * m_moveData.jumpHoldCurveSteepness) + 1);
+			float multiplierFromHold = 1 / (Mathf.Sqrt(jumpHoldTick * m_moveData.jumpHoldCurveSteepness) + 1);
 
 			Vector2 speed2 = new(vel.x, vel.z);
-			float multiplierFromSpeed = ;
-			vel.y += m_moveData.jumpPower * adjustedForHoldTime * multiplierFromSpeed;
+			float multiplierFromSpeed = jumpHoldTick == 0? Mathf.Min(speed2.magnitude / m_moveData.speedForMaxJumpSpeedIncrease, 1) : 0;
+			vel.y += (m_moveData.jumpPower * multiplierFromHold) + (m_moveData.maxJumpSpeedIncrease * multiplierFromSpeed);
 		}
 
 		private void CapVelocity(ref Vector3 vel) {

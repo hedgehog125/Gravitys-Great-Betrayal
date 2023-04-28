@@ -14,15 +14,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   acceleration: 0.5
   maxSpeed: 5
-  jumpPower: 5
+  jumpPower: 3
   jumpLayer:
     serializedVersion: 2
     m_Bits: 641
-  nearGroundDistance: 0.25
+  nearGroundDistance: 0.4
   maxJumpBufferTime: 7
   maxJumpBufferVelocity: 0.1
   maxMidairJumps: 1
   midairJumpPower: 5
   maxJumpHoldTime: 7
-  jumpHoldCurveSteepness: 2
+  jumpHoldCurveSteepness: 10
+  maxJumpSpeedIncrease: 1.5
+  speedForMaxJumpSpeedIncrease: 4.75
   topDownThreshold: 0.1

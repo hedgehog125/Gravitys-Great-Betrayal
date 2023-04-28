@@ -29,8 +29,8 @@ public static class Util {
 	}
 
 	public class GroundDetector {
-		private const float OFFSET = 0.01f;
-		private const float HIT_DISTANCE = 0.025f;
+		private const float OFFSET = 0.025f;
+		private const float HIT_DISTANCE = 0.05f;
 
 		private Vector3 raycastOriginOffset;
 		private LayerMask groundLayers;
