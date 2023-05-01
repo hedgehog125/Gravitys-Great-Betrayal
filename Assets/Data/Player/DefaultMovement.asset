@@ -12,19 +12,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2158d2aabb3e1954d8e62dd549bd725d, type: 3}
   m_Name: DefaultMovement
   m_EditorClassIdentifier: 
-  acceleration: 0.5
+  acceleration: 0.45
   maxSpeed: 5
-  jumpPower: 3
+  jumpPower: 2
   jumpLayer:
     serializedVersion: 2
     m_Bits: 641
   nearGroundDistance: 0.4
-  maxJumpBufferTime: 7
+  coyoteTime: 7
+  maxJumpBufferTime: 3
   maxJumpBufferVelocity: 0.1
   maxMidairJumps: 1
   midairJumpPower: 5
+  midairJumpYVelReduction: 2.25
   maxJumpHoldTime: 7
-  jumpHoldCurveSteepness: 10
+  jumpHoldCurveSteepness: 2
   maxJumpSpeedIncrease: 1.5
-  speedForMaxJumpSpeedIncrease: 4.75
+  speedForMaxJumpSpeedIncrease: 5
   topDownThreshold: 0.1

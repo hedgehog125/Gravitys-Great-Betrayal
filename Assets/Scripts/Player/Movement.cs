@@ -20,6 +20,7 @@ namespace Player {
 		private void OnJump(InputValue input) {
 			jumpInput = input.isPressed;
 			bufferedJumpInput = jumpInput;
+			if (jumpInput && jumpBufferHoldTick != -1) jumpBufferHoldTick = 0; // Reset the hold time when a jump is buffered again in midair
 		}
 		private bool switchGravityInput;
 		private void OnSwitchGravity(InputValue input) {
@@ -28,9 +29,12 @@ namespace Player {
 
 		private Util.GroundDetector groundDetector;
 		private int jumpBufferTick = -1;
-		private bool bufferedJumpInput; // Like jumpInput but it's not set to false when a jump is first buffered
+		private int jumpBufferHoldTick = -1; // Records how long jump was held in midair
+		private bool bufferedJumpInput; // Like jumpInput but it's not set to false when a jump is first buffered or when a jump is started
+
 		private int jumpHoldTick = -1;
 		private int midairJumpCount;
+		private int coyoteTick = -1;
 
 
 		private Rigidbody rb;
@@ -49,6 +53,7 @@ namespace Player {
 			Vector3 vel = Globals.CurrentGravityController.Adjust(rb.velocity);
 			bool onGround = groundDetector.Check(transform.position, out float groundDistance);
 			bool nearGround = groundDistance < m_moveData.nearGroundDistance;
+			
 
 			MoveTick(ref vel);
 			JumpTick(ref vel, onGround, nearGround);
@@ -89,12 +94,24 @@ namespace Player {
 		private void JumpTick(ref Vector3 vel, bool onGround, bool nearGround) {
 			if (onGround) {
 				midairJumpCount = 0;
+				coyoteTick = 0;
+			}
+			else {
+				if (coyoteTick != -1) {
+					if (coyoteTick == m_moveData.coyoteTime) {
+						coyoteTick = -1;
+					}
+					else {
+						coyoteTick++;
+					}
+				}
 			}
 
 			bool jumpBuffered = false;
 			if (jumpBufferTick != -1) {
 				if (jumpBufferTick == m_moveData.maxJumpBufferTime) {
 					jumpBufferTick = -1;
+					jumpBufferHoldTick = -1;
 				}
 				else {
 					jumpBuffered = true;
@@ -102,38 +119,54 @@ namespace Player {
 				}
 			}
 
+			if (jumpBufferHoldTick != 0 && bufferedJumpInput) {
+				jumpBufferHoldTick++;
+			}
+
 			if (jumpHoldTick == -1) {
 				if (jumpInput || jumpBuffered) {
 					bool canMidairJump = midairJumpCount < m_moveData.maxMidairJumps;
 
-					if (onGround) {
-						if (vel.y < 0) vel.y = 0;
+					if (onGround || coyoteTick != -1) {
+						vel.y = 0;
 						jumpHoldTick = 0;
 						jumpBufferTick = -1;
+						jumpBufferHoldTick = -1;
+						coyoteTick = -1;
 
 						ActiveJumpTick(ref vel);
 					}
-					else if ((nearGround || (! canMidairJump)) && vel.y < m_moveData.maxJumpBufferVelocity) {
-						jumpBufferTick = 0; // Buffer the jump
-					}
-					else if (canMidairJump) {
-						if (vel.y < 0) vel.y = 0;
-						vel.y += m_moveData.midairJumpPower;
+					else if (jumpInput) {
+						if ((nearGround || (! canMidairJump)) && vel.y < m_moveData.maxJumpBufferVelocity) {
+							jumpBufferTick = 0; // Buffer the jump
+							jumpBufferHoldTick = 0;
+						}
+						else if (canMidairJump) {
+							/*
+							 * Because physics, Pythagoras is the starting point as it means double tapping results in slightly less height than holding and then double jumping at the peak. 
+							*/
+							vel.y = Mathf.Pow(
+								Mathf.Pow(Mathf.Max(vel.y, 0), m_moveData.midairJumpYVelReduction)
+								+ Mathf.Pow(m_moveData.midairJumpPower, m_moveData.midairJumpYVelReduction)
+							, 1 / m_moveData.midairJumpYVelReduction);
 
-						midairJumpCount++;
-						jumpBufferTick = -1;
-						// jumpHoldTick isn't reset so the player can still get that height
+							midairJumpCount++;
+							jumpBufferTick = -1;
+							// jumpHoldTick isn't reset so the player can still get that height
+						}
 					}
 					jumpInput = false;
 				}
 			}
 			else {
-				if (jumpHoldTick == m_moveData.maxJumpHoldTime || (! bufferedJumpInput)) { // bufferedJumpInput is dropped in less situations
+				bool jumpHeld = bufferedJumpInput || jumpBufferHoldTick > 0;
+				if (jumpHoldTick == m_moveData.maxJumpHoldTime || (! jumpHeld)) {
 					jumpHoldTick = -1;
 					if (! jumpInput) bufferedJumpInput = false;
 				}
 				else {
 					jumpHoldTick++;
+					if (jumpBufferHoldTick != -1) jumpBufferHoldTick--;
 					ActiveJumpTick(ref vel);
 				}
 			}
@@ -141,7 +174,7 @@ namespace Player {
 		private void ActiveJumpTick(ref Vector3 vel) {
 			float multiplierFromHold = 1 / (Mathf.Sqrt(jumpHoldTick * m_moveData.jumpHoldCurveSteepness) + 1);
 
-			Vector2 speed2 = new(vel.x, vel.z);
+			Vector2 speed2 = new(vel.x, vel.z); // Note: this might have increased for this frame but it hasn't been capped yet
 			float multiplierFromSpeed = jumpHoldTick == 0? Mathf.Min(speed2.magnitude / m_moveData.speedForMaxJumpSpeedIncrease, 1) : 0;
 			vel.y += (m_moveData.jumpPower * multiplierFromHold) + (m_moveData.maxJumpSpeedIncrease * multiplierFromSpeed);
 		}

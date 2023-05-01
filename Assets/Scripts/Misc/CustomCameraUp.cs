@@ -9,7 +9,7 @@ using Cinemachine;
 [SaveDuringPlay]
 [AddComponentMenu("")] // Hide in menu
 public class CustomCameraUp : CinemachineExtension {
-	public Vector3 Up = new(0, 1, 0);
+	[HideInInspector] public Vector3 Up = new(0, 1, 0);
 
 	protected override void PostPipelineStageCallback(
 		CinemachineVirtualCameraBase vcam,

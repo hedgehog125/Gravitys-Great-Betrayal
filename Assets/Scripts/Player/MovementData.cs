@@ -12,13 +12,15 @@ namespace Player {
 		[Header("Jumping")]
 		public float jumpPower;
 		public LayerMask jumpLayer;
-		public float nearGroundDistance;
+		public float nearGroundDistance; // When the player is close to the ground, jumps are buffered instead of triggering double jumps
+		public int coyoteTime;
 
 		public int maxJumpBufferTime;
 		public float maxJumpBufferVelocity; // Double jump if the player's upwards velocity is equal or more than this
 
 		public int maxMidairJumps;
 		public float midairJumpPower;
+		public float midairJumpYVelReduction;
 
 		public int maxJumpHoldTime;
 		public float jumpHoldCurveSteepness;
