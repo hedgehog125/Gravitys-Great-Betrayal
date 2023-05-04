@@ -28,6 +28,11 @@ namespace Player {
 		public float maxJumpSpeedIncrease;
 		public float speedForMaxJumpSpeedIncrease; // The speed needed to get the maximum increase due to speed
 
+		[Header("Gravity Switching")]
+		public int gravitySwitchCooldown;
+		public int maxMidairGravitySwitches;
+		public int gravitySwitchFloatTime;
+
 		[Header("Misc")]
 		public float topDownThreshold;
 	}

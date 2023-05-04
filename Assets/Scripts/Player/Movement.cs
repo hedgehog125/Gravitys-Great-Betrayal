@@ -42,6 +42,9 @@ namespace Player {
 		private int coyoteTick = -1;
 
 		private Vector3 facingDirection;
+		private int midairGravitySwitchCount;
+		private int gravitySwitchCooldownTick = -1;
+		private int gravitySwitchFloatTick = -1;
 
 
 		private Rigidbody rb;
@@ -65,11 +68,12 @@ namespace Player {
 			
 
 			MoveTick(ref vel);
+			CoyoteTick(onGround);
 			JumpTick(ref vel, onGround, nearGround);
 			CapVelocity(ref vel);
 
-			GravityTick(ref vel);
 			rb.velocity = Globals.CurrentGravityController.Apply(vel);
+			GravityTick(onGround);
 
 			frictionEffector.Tick(onGround);
 		}
@@ -107,9 +111,8 @@ namespace Player {
 			if (Globals.CurrentGravityController.Direction == 5) player.VisibleController.LookAngle += 180; // Already spent an hour trying to fix this properly, so a bodge will have to do for now
 			facingDirection = moveDirection;
 		}
-		private void JumpTick(ref Vector3 vel, bool onGround, bool nearGround) {
+		private void CoyoteTick(bool onGround) {
 			if (onGround) {
-				midairJumpCount = 0;
 				coyoteTick = 0;
 			}
 			else {
@@ -121,6 +124,11 @@ namespace Player {
 						coyoteTick++;
 					}
 				}
+			}
+		}
+		private void JumpTick(ref Vector3 vel, bool onGround, bool nearGround) {
+			if (onGround) {
+				midairJumpCount = 0;
 			}
 
 			bool jumpBuffered = false;
@@ -199,39 +207,74 @@ namespace Player {
 			vel = Util.LimitXZ(vel, m_moveData.maxSpeed);
 		}
 
-		private void GravityTick(ref Vector3 vel) {
-			if (switchGravityInput || switchGravityUpInput) {
-				Gravity gravityController = Globals.CurrentGravityController;
-				if (switchGravityInput) {
-					Vector3 appliedFacing = gravityController.Apply(facingDirection);
-
-					// Find the main axis
-					float largest = -1;
-					int largestID = -1;
-					for (int i = 0; i < 3; i++) {
-						float abs = Mathf.Abs(appliedFacing[i]);
-						if (abs > largest) {
-							largest = abs;
-							largestID = i;
-						}
-					}
-					Vector3Int axisDirection = Vector3Int.zero;
-					axisDirection[largestID] = appliedFacing[largestID] > 0? 1 : -1;
-
-
-					gravityController.ChangeDirection(Gravity.DirectionToID(axisDirection));
-				}
-				else {
-					gravityController.ChangeDirection(Gravity.DirectionToID(
-						Util.RoundVector(gravityController.Apply(ADJUSTED_UP))
-					));
-				}
-
-				switchGravityInput = false;
-				switchGravityUpInput = false;
+		private void GravityTick(bool onGround) {
+			if (onGround || coyoteTick != -1) {
+				midairGravitySwitchCount = 0;
 			}
 
-			vel.y += Gravity.AmountPerTick;
+			if (gravitySwitchCooldownTick != -1) {
+				if (gravitySwitchCooldownTick == m_moveData.gravitySwitchCooldown) {
+					gravitySwitchCooldownTick = -1;
+				}
+				else {
+					gravitySwitchCooldownTick++;
+				}
+			}
+			if (gravitySwitchFloatTick != -1) {
+				if (gravitySwitchFloatTick == m_moveData.gravitySwitchFloatTime) {
+					gravitySwitchFloatTick = -1;
+				}
+				else {
+					gravitySwitchFloatTick++;
+				}
+			}
+
+			if (
+				gravitySwitchCooldownTick == -1
+				&& midairGravitySwitchCount != m_moveData.maxMidairGravitySwitches
+			) {
+				if (switchGravityInput || switchGravityUpInput) {
+					Gravity gravityController = Globals.CurrentGravityController;
+					if (switchGravityInput) {
+						Vector3 appliedFacing = gravityController.Apply(facingDirection);
+
+						// Find the main axis
+						float largest = -1;
+						int largestID = -1;
+						for (int i = 0; i < 3; i++) {
+							float abs = Mathf.Abs(appliedFacing[i]);
+							if (abs > largest) {
+								largest = abs;
+								largestID = i;
+							}
+						}
+						Vector3Int axisDirection = Vector3Int.zero;
+						axisDirection[largestID] = appliedFacing[largestID] > 0 ? 1 : -1;
+
+
+						gravityController.ChangeDirection(Gravity.DirectionToID(axisDirection));
+					}
+					else {
+						gravityController.ChangeDirection(Gravity.DirectionToID(
+							Util.RoundVector(gravityController.Apply(ADJUSTED_UP))
+						));
+					}
+
+					gravitySwitchCooldownTick = 0;
+					gravitySwitchFloatTick = 0;
+					midairGravitySwitchCount++;
+				}
+			}
+
+			if (gravitySwitchFloatTick == -1) {
+				Vector3 vel = Globals.CurrentGravityController.Adjust(rb.velocity);
+				vel.y += Gravity.AmountPerTick;
+				rb.velocity = Globals.CurrentGravityController.Apply(vel);
+			}
+			
+
+			switchGravityInput = false;
+			switchGravityUpInput = false;
 		}
 
 		#region Tests

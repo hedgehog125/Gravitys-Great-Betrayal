@@ -29,4 +29,7 @@ MonoBehaviour:
   jumpHoldCurveSteepness: 2
   maxJumpSpeedIncrease: 1.5
   speedForMaxJumpSpeedIncrease: 5
+  gravitySwitchCooldown: 25
+  maxMidairGravitySwitches: 1
+  gravitySwitchFloatTime: 10
   topDownThreshold: 0.1
