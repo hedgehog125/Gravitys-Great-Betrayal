@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Player
+  m_Name: PlayerBlue
   m_Shader: {fileID: -6465566751694194690, guid: 0a212477e943f624ea1df48f7d5aef28,
     type: 3}
   m_Parent: {fileID: 0}
@@ -30,7 +30,7 @@ Material:
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 2450
+  m_CustomRenderQueue: 2000
   stringTagMap: {}
   disabledShaderPasses: []
   m_LockedProperties: 
@@ -153,7 +153,7 @@ Material:
     - _ZWrite: 1
     - _ZWriteControl: 0
     m_Colors:
-    - BaseColor: {r: 1, g: 0.60784316, b: 0, a: 1}
+    - BaseColor: {r: 0.34591186, g: 0.69844466, b: 1, a: 1}
     - SpecularColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 0}
     - _BaseColor: {r: 1, g: 0.64705884, b: 0, a: 1}
     - _Base_Color: {r: 1, g: 0.60784316, b: 0, a: 1}

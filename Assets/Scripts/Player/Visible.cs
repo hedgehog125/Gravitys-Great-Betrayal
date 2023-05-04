@@ -16,7 +16,7 @@ namespace Player {
 
 		private void Update() {
 			transform.eulerAngles = Gravity.Rotations[Globals.CurrentGravityController.Direction];
-			m_renderers[0].transform.eulerAngles = Globals.CurrentGravityController.Apply(new Vector3(0, LookAngle, 0));
+			m_renderers[0].transform.localEulerAngles = new Vector3(0, LookAngle, 0);
 
 			if (Vector3.Distance(transform.position, cam.transform.position) < m_transparentCameraDistance) {
 				m_renderers.ForEach(ren => ren.material.SetFloat("Alpha", 0.25f));

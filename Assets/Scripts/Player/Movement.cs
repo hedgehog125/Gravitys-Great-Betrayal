@@ -41,6 +41,8 @@ namespace Player {
 		private int midairJumpCount;
 		private int coyoteTick = -1;
 
+		private Vector3 facingDirection;
+
 
 		private Rigidbody rb;
 		private FrictionEffector frictionEffector;
@@ -75,18 +77,22 @@ namespace Player {
 
 		private void MoveTick(ref Vector3 vel) {
 			float moveAmount = Mathf.Sqrt(Mathf.Pow(moveInput.x, 2) + Mathf.Pow(moveInput.y, 2));
+			bool inputIsNeutral = moveAmount < 0.01f; // If it's less than the deadzone then it'll have already been set to 0
+			if (inputIsNeutral) return;
 
 			Vector3 moveDirection;
+			Vector3 normalizedCamForward;
 			{
 				Vector3 forward = cam.transform.forward;
 				forward = Globals.CurrentGravityController.Adjust(forward);
 				forward.y = 0;
+				normalizedCamForward = forward.normalized;
 
 				if (forward.magnitude < m_moveData.topDownThreshold) { // Somewhat of a niche situation, just use the use the gravity remappings
 					moveDirection = ADJUSTED_FORWARD;
 				}
 				else {
-					moveDirection = forward.normalized;
+					moveDirection = normalizedCamForward;
 				}
 			}
 
@@ -97,7 +103,9 @@ namespace Player {
 			}
 
 			vel += moveDirection * (moveAmount * m_moveData.acceleration);
-			player.VisibleController.LookAngle = Random.Range(0, 360);
+			player.VisibleController.LookAngle = Vector3.SignedAngle(ADJUSTED_FORWARD, moveDirection, ADJUSTED_UP);
+			if (Globals.CurrentGravityController.Direction == 5) player.VisibleController.LookAngle += 180; // Already spent an hour trying to fix this properly, so a bodge will have to do for now
+			facingDirection = moveDirection;
 		}
 		private void JumpTick(ref Vector3 vel, bool onGround, bool nearGround) {
 			if (onGround) {
@@ -195,7 +203,23 @@ namespace Player {
 			if (switchGravityInput || switchGravityUpInput) {
 				Gravity gravityController = Globals.CurrentGravityController;
 				if (switchGravityInput) {
-					gravityController.ChangeDirection(Random.Range(0, 6));
+					Vector3 appliedFacing = gravityController.Apply(facingDirection);
+
+					// Find the main axis
+					float largest = -1;
+					int largestID = -1;
+					for (int i = 0; i < 3; i++) {
+						float abs = Mathf.Abs(appliedFacing[i]);
+						if (abs > largest) {
+							largest = abs;
+							largestID = i;
+						}
+					}
+					Vector3Int axisDirection = Vector3Int.zero;
+					axisDirection[largestID] = appliedFacing[largestID] > 0? 1 : -1;
+
+
+					gravityController.ChangeDirection(Gravity.DirectionToID(axisDirection));
 				}
 				else {
 					gravityController.ChangeDirection(Gravity.DirectionToID(

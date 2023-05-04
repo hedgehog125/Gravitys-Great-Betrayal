@@ -118,9 +118,9 @@ MonoBehaviour:
       type: 3}
   m_RendererFeatures:
   - {fileID: -1878332245247344467}
-  - {fileID: -8060460053924622524}
   - {fileID: -1202461033116795302}
-  m_RendererFeatureMap: adc0de57c6d2eee544cf987f497e23905afed2b00f0050ef
+  - {fileID: -8060460053924622524}
+  m_RendererFeatureMap: adc0de57c6d2eee55afed2b00f0050ef44cf987f497e2390
   m_UseNativeRenderPass: 0
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
   xrSystemData: {fileID: 11400000, guid: 60e1133243b97e347b653163a8c01b64, type: 2}
@@ -145,7 +145,7 @@ MonoBehaviour:
     m_Bits: 759
   m_TransparentLayerMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 2147483647
   m_DefaultStencilState:
     overrideStencilState: 0
     stencilReference: 0
