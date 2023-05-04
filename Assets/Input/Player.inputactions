@@ -18,7 +18,7 @@
                     "name": "Jump",
                     "type": "Value",
                     "id": "4682f172-f26c-4d07-9324-8ab0db0d0134",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
@@ -45,7 +45,16 @@
                     "name": "SwitchGravity",
                     "type": "Value",
                     "id": "304a4fb3-2669-4687-af4a-f875381cfb36",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "SwitchGravityUp",
+                    "type": "Value",
+                    "id": "32ea13b4-d80a-4bb5-b964-7dda3965febe",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
@@ -181,6 +190,39 @@
                     "processors": "StickDeadzone",
                     "groups": "Controller",
                     "action": "UnscaledLook",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8dbd88fa-5149-403f-b75e-0e2bfeda5518",
+                    "path": "<Keyboard>/tab",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "SwitchGravityUp",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "cff2dda3-83e2-43e0-b675-86c28eeb8d5a",
+                    "path": "<Gamepad>/rightShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Controller",
+                    "action": "SwitchGravityUp",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "582a2f3a-4971-4eef-a2d9-c2945a061d11",
+                    "path": "<Gamepad>/dpad/up",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Controller",
+                    "action": "SwitchGravityUp",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

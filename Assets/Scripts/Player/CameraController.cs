@@ -21,7 +21,7 @@ namespace Player {
 		}
 
 		private void OnGravityChange() {
-			m_cameraUpController.Up = Globals.CurrentGravityController.Apply(new Vector3(0, 1, 0));
+			m_cameraUpController.Up = Globals.CurrentGravityController.Apply(Vector3.up);
 		}
 	}
 }

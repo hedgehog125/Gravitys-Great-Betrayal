@@ -7,6 +7,7 @@ using UnityEngine.InputSystem;
 namespace Player { 
 	public class Movement : MonoBehaviour {
 		private static Vector3 ADJUSTED_FORWARD = new(0, 0, 1);
+		private static Vector3 ADJUSTED_UP = new(0, 1, 0);
 
 
 		[SerializeField] private MovementData m_moveData;
@@ -26,6 +27,10 @@ namespace Player {
 		private void OnSwitchGravity(InputValue input) {
 			switchGravityInput = input.isPressed;
 		}
+		private bool switchGravityUpInput;
+		private void OnSwitchGravityUp(InputValue input) {
+			switchGravityUpInput = input.isPressed;
+		}
 
 		private Util.GroundDetector groundDetector;
 		private int jumpBufferTick = -1;
@@ -39,10 +44,12 @@ namespace Player {
 
 		private Rigidbody rb;
 		private FrictionEffector frictionEffector;
+		private Player player;
 		private Camera cam;
 		private void Awake() {
 			rb = GetComponent<Rigidbody>();
 			frictionEffector = GetComponent<FrictionEffector>();
+			player = GetComponent<Player>();
 			cam = Camera.main;
 
 			Collider col = GetComponent<Collider>();
@@ -90,6 +97,7 @@ namespace Player {
 			}
 
 			vel += moveDirection * (moveAmount * m_moveData.acceleration);
+			player.VisibleController.LookAngle = Random.Range(0, 360);
 		}
 		private void JumpTick(ref Vector3 vel, bool onGround, bool nearGround) {
 			if (onGround) {
@@ -152,7 +160,7 @@ namespace Player {
 
 							midairJumpCount++;
 							jumpBufferTick = -1;
-							// jumpHoldTick isn't reset so the player can still get that height
+							// jumpHoldTick doesn't need to be reset as it'll be -1 here anyway and can't be restarted
 						}
 					}
 					jumpInput = false;
@@ -184,9 +192,19 @@ namespace Player {
 		}
 
 		private void GravityTick(ref Vector3 vel) {
-			if (switchGravityInput) {
-				Globals.CurrentGravityController.ChangeDirection(Random.Range(0, 6));
+			if (switchGravityInput || switchGravityUpInput) {
+				Gravity gravityController = Globals.CurrentGravityController;
+				if (switchGravityInput) {
+					gravityController.ChangeDirection(Random.Range(0, 6));
+				}
+				else {
+					gravityController.ChangeDirection(Gravity.DirectionToID(
+						Util.RoundVector(gravityController.Apply(ADJUSTED_UP))
+					));
+				}
+
 				switchGravityInput = false;
+				switchGravityUpInput = false;
 			}
 
 			vel.y += Gravity.AmountPerTick;

@@ -16,6 +16,9 @@ public static class Util {
 
 		return new Vector3(vec2.x, vec.y, vec2.y);
 	}
+	public static Vector3Int RoundVector(Vector3 vec) {
+		return new(Mathf.RoundToInt(vec.x), Mathf.RoundToInt(vec.y), Mathf.RoundToInt(vec.z));
+	}
 
 	public static Vector2 RotateAroundOrigin(Vector2 point, float radians) {
 		float sin = Mathf.Sin(-radians);

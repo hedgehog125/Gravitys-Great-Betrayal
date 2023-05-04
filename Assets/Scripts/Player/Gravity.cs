@@ -53,6 +53,15 @@ namespace Player {
 			new int[] { -1, 3, 2 } // Towards
 		};
 		private static readonly int[][] ADJUSTED_TO_DIRECTIONS = CalculateInvertDirections(DIRECTIONS_TO_ADJUSTED);
+		private static readonly Dictionary<Vector3Int, int> DIRECTIONS_TO_IDs = new() {
+			{ new(0, -1, 0), 0 },
+			{ new(0, 1, 0), 1 },
+			{ new(-1, 0, 0), 2 },
+			{ new(1, 0, 0), 3 },
+			{ new(0, 0, 1), 4 },
+			{ new(0, 0, -1), 5 }
+		};
+
 		private readonly UnityEvent gravityChangeEvent = new(); 
 
 		private void Awake() {
@@ -89,6 +98,10 @@ namespace Player {
 		}
 		public static Vector3 ApplyToDirection(Vector3 original, int targetDirectionID) {
 			return AdjustOrApply(original, targetDirectionID, true);
+		}
+
+		public static int DirectionToID(Vector3Int direction) {
+			return DIRECTIONS_TO_IDs[direction];
 		}
 		#endregion
 
