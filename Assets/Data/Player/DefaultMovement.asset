@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: DefaultMovement
   m_EditorClassIdentifier: 
   acceleration: 0.45
+  airAcceleration: 0.225
   maxSpeed: 5
   jumpPower: 2
   jumpLayer:
@@ -32,4 +33,8 @@ MonoBehaviour:
   gravitySwitchCooldown: 25
   maxMidairGravitySwitches: 1
   gravitySwitchFloatTime: 10
+  neutralSpeedMultiplier: 0.96
+  airNeutralSpeedMultiplier: 0.975
+  turnSpeedMultiplier: 0.95
+  airTurnSpeedMultiplier: 0.75
   topDownThreshold: 0.1

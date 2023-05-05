@@ -41,7 +41,7 @@ namespace Player {
 		private int midairJumpCount;
 		private int coyoteTick = -1;
 
-		private Vector3 facingDirection;
+		private Vector3 facingDirection = ADJUSTED_FORWARD;
 		private int midairGravitySwitchCount;
 		private int gravitySwitchCooldownTick = -1;
 		private int gravitySwitchFloatTick = -1;
@@ -67,10 +67,10 @@ namespace Player {
 			bool nearGround = groundDistance < m_moveData.nearGroundDistance;
 			
 
-			MoveTick(ref vel);
+			bool inputIsNeutral = MoveTick(ref vel, onGround);
 			CoyoteTick(onGround);
 			JumpTick(ref vel, onGround, nearGround);
-			CapVelocity(ref vel);
+			VelocityTick(ref vel, onGround, inputIsNeutral);
 
 			rb.velocity = Globals.CurrentGravityController.Apply(vel);
 			GravityTick(onGround);
@@ -79,10 +79,10 @@ namespace Player {
 		}
 
 
-		private void MoveTick(ref Vector3 vel) {
+		private bool MoveTick(ref Vector3 vel, bool onGround) {
 			float moveAmount = Mathf.Sqrt(Mathf.Pow(moveInput.x, 2) + Mathf.Pow(moveInput.y, 2));
 			bool inputIsNeutral = moveAmount < 0.01f; // If it's less than the deadzone then it'll have already been set to 0
-			if (inputIsNeutral) return;
+			if (inputIsNeutral) return true;
 
 			Vector3 moveDirection;
 			Vector3 normalizedCamForward;
@@ -106,10 +106,23 @@ namespace Player {
 				moveDirection = new Vector3(asVec2.x, 0, asVec2.y);
 			}
 
-			vel += moveDirection * (moveAmount * m_moveData.acceleration);
+			float acceleration = onGround? m_moveData.acceleration : m_moveData.airAcceleration;
+			vel += moveDirection * (moveAmount * acceleration);
 			player.VisibleController.LookAngle = Vector3.SignedAngle(ADJUSTED_FORWARD, moveDirection, ADJUSTED_UP);
 			if (Globals.CurrentGravityController.Direction == 5) player.VisibleController.LookAngle += 180; // Already spent an hour trying to fix this properly, so a bodge will have to do for now
 			facingDirection = moveDirection;
+
+			{
+				// TODO: should this be based on the magnitude of the 2?
+				bool xSignChanging = vel.x > 0 != moveDirection.x > 0;
+				bool zSignChanging = vel.z > 0 != moveDirection.z > 0;
+
+				float multiplier = onGround ? m_moveData.turnSpeedMultiplier : m_moveData.airTurnSpeedMultiplier;
+				if (xSignChanging) vel.x *= multiplier;
+				if (zSignChanging) vel.z *= multiplier;
+			}
+
+			return false;
 		}
 		private void CoyoteTick(bool onGround) {
 			if (onGround) {
@@ -203,8 +216,15 @@ namespace Player {
 			vel.y += (m_moveData.jumpPower * multiplierFromHold) + (m_moveData.maxJumpSpeedIncrease * multiplierFromSpeed);
 		}
 
-		private void CapVelocity(ref Vector3 vel) {
+		private void VelocityTick(ref Vector3 vel, bool onGround, bool inputIsNeutral) {
 			vel = Util.LimitXZ(vel, m_moveData.maxSpeed);
+
+			if (inputIsNeutral) {
+				float multiplier = onGround? m_moveData.neutralSpeedMultiplier : m_moveData.airNeutralSpeedMultiplier;
+
+				vel.x *= multiplier;
+				vel.z *= multiplier;
+			}
 		}
 
 		private void GravityTick(bool onGround) {
@@ -235,6 +255,11 @@ namespace Player {
 			) {
 				if (switchGravityInput || switchGravityUpInput) {
 					Gravity gravityController = Globals.CurrentGravityController;
+					Vector3 vel = gravityController.Adjust(rb.velocity);
+					if (vel.y < 0) vel.y = 0;
+					rb.velocity = gravityController.Apply(vel);
+
+
 					if (switchGravityInput) {
 						Vector3 appliedFacing = gravityController.Apply(facingDirection);
 
@@ -263,6 +288,7 @@ namespace Player {
 					gravitySwitchCooldownTick = 0;
 					gravitySwitchFloatTick = 0;
 					midairGravitySwitchCount++;
+					midairJumpCount = 0;
 				}
 			}
 

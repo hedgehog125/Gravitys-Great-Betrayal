@@ -7,6 +7,7 @@ namespace Player {
 	public class MovementData : ScriptableObject {
 		[Header("Running")]
 		public float acceleration;
+		public float airAcceleration;
 		public float maxSpeed;
 
 		[Header("Jumping")]
@@ -32,6 +33,13 @@ namespace Player {
 		public int gravitySwitchCooldown;
 		public int maxMidairGravitySwitches;
 		public int gravitySwitchFloatTime;
+
+		[Header("Momentum")]
+		public float neutralSpeedMultiplier;
+		public float airNeutralSpeedMultiplier;
+
+		public float turnSpeedMultiplier; // The multiplier for the existing speed when turning while on the ground
+		public float airTurnSpeedMultiplier;
 
 		[Header("Misc")]
 		public float topDownThreshold;
