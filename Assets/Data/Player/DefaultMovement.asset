@@ -35,6 +35,9 @@ MonoBehaviour:
   gravitySwitchFloatTime: 10
   neutralSpeedMultiplier: 0.96
   airNeutralSpeedMultiplier: 0.975
-  turnSpeedMultiplier: 0.95
-  airTurnSpeedMultiplier: 0.75
+  turnAccelerationMultiplier: 1.9
+  airTurnAccelerationMultiplier: 1.25
+  doubleJumpSubtractiveMinTurn: 100
+  doubleJumpAdditiveMultiplier: 0.8
+  doubleJumpSubtractiveMultiplier: 0.3
   topDownThreshold: 0.1

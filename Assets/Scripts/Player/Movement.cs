@@ -42,6 +42,7 @@ namespace Player {
 		private int coyoteTick = -1;
 
 		private Vector3 facingDirection = ADJUSTED_FORWARD;
+		private float currentTurnAmount;
 		private int midairGravitySwitchCount;
 		private int gravitySwitchCooldownTick = -1;
 		private int gravitySwitchFloatTick = -1;
@@ -69,7 +70,7 @@ namespace Player {
 
 			bool inputIsNeutral = MoveTick(ref vel, onGround);
 			CoyoteTick(onGround);
-			JumpTick(ref vel, onGround, nearGround);
+			JumpTick(ref vel, onGround, nearGround, inputIsNeutral);
 			VelocityTick(ref vel, onGround, inputIsNeutral);
 
 			rb.velocity = Globals.CurrentGravityController.Apply(vel);
@@ -82,7 +83,10 @@ namespace Player {
 		private bool MoveTick(ref Vector3 vel, bool onGround) {
 			float moveAmount = Mathf.Sqrt(Mathf.Pow(moveInput.x, 2) + Mathf.Pow(moveInput.y, 2));
 			bool inputIsNeutral = moveAmount < 0.01f; // If it's less than the deadzone then it'll have already been set to 0
-			if (inputIsNeutral) return true;
+			if (inputIsNeutral) {
+				currentTurnAmount = 0;
+				return true;
+			}
 
 			Vector3 moveDirection;
 			Vector3 normalizedCamForward;
@@ -106,21 +110,31 @@ namespace Player {
 				moveDirection = new Vector3(asVec2.x, 0, asVec2.y);
 			}
 
-			float acceleration = onGround? m_moveData.acceleration : m_moveData.airAcceleration;
-			vel += moveDirection * (moveAmount * acceleration);
-			player.VisibleController.LookAngle = Vector3.SignedAngle(ADJUSTED_FORWARD, moveDirection, ADJUSTED_UP);
-			if (Globals.CurrentGravityController.Direction == 5) player.VisibleController.LookAngle += 180; // Already spent an hour trying to fix this properly, so a bodge will have to do for now
-			facingDirection = moveDirection;
-
+			bool turning;
 			{
-				// TODO: should this be based on the magnitude of the 2?
 				bool xSignChanging = vel.x > 0 != moveDirection.x > 0;
 				bool zSignChanging = vel.z > 0 != moveDirection.z > 0;
-
-				float multiplier = onGround ? m_moveData.turnSpeedMultiplier : m_moveData.airTurnSpeedMultiplier;
-				if (xSignChanging) vel.x *= multiplier;
-				if (zSignChanging) vel.z *= multiplier;
+				turning = xSignChanging || zSignChanging;
 			}
+
+			float acceleration = onGround? m_moveData.acceleration : m_moveData.airAcceleration;
+			if (turning) acceleration *= onGround? m_moveData.turnAccelerationMultiplier : m_moveData.airTurnAccelerationMultiplier;
+
+			vel += moveDirection * (moveAmount * acceleration);
+
+			player.VisibleController.LookAngle = Vector3.SignedAngle(ADJUSTED_FORWARD, moveDirection, ADJUSTED_UP);
+			if (Globals.CurrentGravityController.Direction == 5) player.VisibleController.LookAngle += 180;
+			// ^ Already spent an hour trying to fix this properly, so a bodge will have to do for now
+
+			{
+				Vector2 asVec2 = new(vel.x, vel.z);
+				asVec2 = asVec2.normalized;
+
+				currentTurnAmount = Vector3.Angle(new(asVec2.x, 0, asVec2.y), moveDirection);
+			}
+			facingDirection = moveDirection;
+
+			
 
 			return false;
 		}
@@ -139,7 +153,7 @@ namespace Player {
 				}
 			}
 		}
-		private void JumpTick(ref Vector3 vel, bool onGround, bool nearGround) {
+		private void JumpTick(ref Vector3 vel, bool onGround, bool nearGround, bool inputIsNeutral) {
 			if (onGround) {
 				midairJumpCount = 0;
 			}
@@ -187,6 +201,13 @@ namespace Player {
 								+ Mathf.Pow(m_moveData.midairJumpPower, m_moveData.midairJumpYVelReduction)
 							, 1 / m_moveData.midairJumpYVelReduction);
 
+							Debug.Log(currentTurnAmount);
+							float multiplier = (inputIsNeutral || currentTurnAmount > m_moveData.doubleJumpSubtractiveMinTurn)?
+								m_moveData.doubleJumpSubtractiveMultiplier
+								: m_moveData.doubleJumpAdditiveMultiplier
+							;
+							vel = Util.MultiplyXZMagnitude(vel, multiplier);
+
 							midairJumpCount++;
 							jumpBufferTick = -1;
 							// jumpHoldTick doesn't need to be reset as it'll be -1 here anyway and can't be restarted
@@ -221,9 +242,7 @@ namespace Player {
 
 			if (inputIsNeutral) {
 				float multiplier = onGround? m_moveData.neutralSpeedMultiplier : m_moveData.airNeutralSpeedMultiplier;
-
-				vel.x *= multiplier;
-				vel.z *= multiplier;
+				vel = Util.MultiplyXZMagnitude(vel, multiplier);
 			}
 		}
 

@@ -38,8 +38,13 @@ namespace Player {
 		public float neutralSpeedMultiplier;
 		public float airNeutralSpeedMultiplier;
 
-		public float turnSpeedMultiplier; // The multiplier for the existing speed when turning while on the ground
-		public float airTurnSpeedMultiplier;
+		public float turnAccelerationMultiplier; // The multiplier for the existing speed when turning while on the ground
+		public float airTurnAccelerationMultiplier;
+
+		public float doubleJumpSubtractiveMinTurn;
+		// ^ The minimum difference between in degrees between the inputted direction and the player's momentum to get the subtractive amount
+		public float doubleJumpAdditiveMultiplier; // When the control stick is roughly in the same direction as your momentum
+		public float doubleJumpSubtractiveMultiplier; // Neutral or holding back
 
 		[Header("Misc")]
 		public float topDownThreshold;

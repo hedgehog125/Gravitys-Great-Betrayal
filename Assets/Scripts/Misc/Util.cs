@@ -16,6 +16,12 @@ public static class Util {
 
 		return new Vector3(vec2.x, vec.y, vec2.y);
 	}
+	public static Vector3 MultiplyXZMagnitude(Vector3 vec, float multiplier) {
+		Vector2 asVec2 = new(vec.x, vec.z);
+		asVec2 = asVec2.normalized * (asVec2.magnitude * multiplier);
+
+		return new(asVec2.x, vec.y, asVec2.y);
+	}
 	public static Vector3Int RoundVector(Vector3 vec) {
 		return new(Mathf.RoundToInt(vec.x), Mathf.RoundToInt(vec.y), Mathf.RoundToInt(vec.z));
 	}
