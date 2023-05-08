@@ -15,20 +15,20 @@ MonoBehaviour:
   acceleration: 0.45
   airAcceleration: 0.225
   maxSpeed: 5
-  jumpPower: 2
+  jumpPower: 2.5
   jumpLayer:
     serializedVersion: 2
     m_Bits: 641
-  nearGroundDistance: 0.4
+  nearGroundDistance: 0.35
   coyoteTime: 7
   maxJumpBufferTime: 3
   maxJumpBufferVelocity: 0.1
   maxMidairJumps: 1
-  midairJumpPower: 5
+  midairJumpPower: 6
   midairJumpYVelReduction: 2.25
-  maxJumpHoldTime: 7
+  maxJumpHoldTime: 5
   jumpHoldCurveSteepness: 2
-  maxJumpSpeedIncrease: 1.5
+  maxJumpSpeedIncrease: 1.15
   speedForMaxJumpSpeedIncrease: 5
   gravitySwitchCooldown: 25
   maxMidairGravitySwitches: 1
@@ -38,6 +38,6 @@ MonoBehaviour:
   turnAccelerationMultiplier: 1.9
   airTurnAccelerationMultiplier: 1.25
   doubleJumpSubtractiveMinTurn: 100
-  doubleJumpAdditiveMultiplier: 0.8
+  doubleJumpAdditiveMultiplier: 0.9
   doubleJumpSubtractiveMultiplier: 0.3
   topDownThreshold: 0.1
