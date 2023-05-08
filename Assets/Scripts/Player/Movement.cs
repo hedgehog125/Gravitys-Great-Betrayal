@@ -110,13 +110,7 @@ namespace Player {
 				moveDirection = new Vector3(asVec2.x, 0, asVec2.y);
 			}
 
-			bool turning;
-			{
-				bool xSignChanging = vel.x > 0 != moveDirection.x > 0;
-				bool zSignChanging = vel.z > 0 != moveDirection.z > 0;
-				turning = xSignChanging || zSignChanging;
-			}
-
+			bool turning = currentTurnAmount > m_moveData.turnMinChange;
 			float acceleration = onGround? m_moveData.acceleration : m_moveData.airAcceleration;
 			if (turning) acceleration *= onGround? m_moveData.turnAccelerationMultiplier : m_moveData.airTurnAccelerationMultiplier;
 
@@ -134,7 +128,6 @@ namespace Player {
 			}
 			facingDirection = moveDirection;
 
-			
 
 			return false;
 		}
@@ -201,7 +194,6 @@ namespace Player {
 								+ Mathf.Pow(m_moveData.midairJumpPower, m_moveData.midairJumpYVelReduction)
 							, 1 / m_moveData.midairJumpYVelReduction);
 
-							Debug.Log(currentTurnAmount);
 							float multiplier = (inputIsNeutral || currentTurnAmount > m_moveData.doubleJumpSubtractiveMinTurn)?
 								m_moveData.doubleJumpSubtractiveMultiplier
 								: m_moveData.doubleJumpAdditiveMultiplier

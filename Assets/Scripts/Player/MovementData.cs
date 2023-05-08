@@ -38,6 +38,7 @@ namespace Player {
 		public float neutralSpeedMultiplier;
 		public float airNeutralSpeedMultiplier;
 
+		public float turnMinChange;
 		public float turnAccelerationMultiplier; // The multiplier for the existing speed when turning while on the ground
 		public float airTurnAccelerationMultiplier;
 
