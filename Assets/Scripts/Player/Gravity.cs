@@ -87,17 +87,17 @@ namespace Player {
 		}
 
 		// These can be done in different ways, but it doesn't matter as long as it can be reversed. e.g rotating from upwards gravity to downwards gravity can be done by rotating on 2 different axes (but not both)
-		public Vector3 Adjust(Vector3 original) { // Changes the order and signs so negative y is always down
-			return AdjustFromDirection(original, Direction);
+		public Vector3 Adjust(Vector3 original, bool inRange = true) { // Changes the order and signs so negative y is always down
+			return AdjustFromDirection(original, Direction, inRange);
 		}
-		public Vector3 Apply(Vector3 original) { // Reverses the changes in adjust
-			return ApplyToDirection(original, Direction);
+		public Vector3 Apply(Vector3 original, bool inRange = true) { // Reverses the changes in adjust
+			return ApplyToDirection(original, Direction, inRange);
 		}
-		public static Vector3 AdjustFromDirection(Vector3 original, int originalDirectionID) {
-			return AdjustOrApply(original, originalDirectionID, false);
+		public static Vector3 AdjustFromDirection(Vector3 original, int originalDirectionID, bool inRange = true) {
+			return AdjustOrApply(original, originalDirectionID, false, inRange);
 		}
-		public static Vector3 ApplyToDirection(Vector3 original, int targetDirectionID) {
-			return AdjustOrApply(original, targetDirectionID, true);
+		public static Vector3 ApplyToDirection(Vector3 original, int targetDirectionID, bool inRange = true) {
+			return AdjustOrApply(original, targetDirectionID, true, inRange);
 		}
 
 		public static int DirectionToID(Vector3Int direction) {
@@ -145,7 +145,8 @@ namespace Player {
 
 			return toDirections;
 		}
-		private static Vector3 AdjustOrApply(Vector3 original, int directionID, bool isApply) {
+		private static Vector3 AdjustOrApply(Vector3 original, int directionID, bool isApply, bool inRange) {
+			if (! inRange) return original;
 			// If isApply is true, directionID is the target direction, otherwise it's the direction of the original
 
 			Vector3 outputVector = Vector3.zero;

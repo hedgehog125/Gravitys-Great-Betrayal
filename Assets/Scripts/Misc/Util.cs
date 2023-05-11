@@ -51,14 +51,14 @@ public static class Util {
 			this.maxDistance = maxDistance;
 		}
 
-		public bool Check(Vector3 pos, out float distance) {
-			bool didHit = Physics.Raycast(pos + Globals.CurrentGravityController.Apply(raycastOriginOffset), Globals.CurrentGravityController.Down, out RaycastHit hit, maxDistance, groundLayers);
+		public bool Check(Vector3 pos, out float distance, bool inPlayerGravity = true) {
+			bool didHit = Physics.Raycast(pos + Globals.CurrentGravityController.Apply(raycastOriginOffset, inPlayerGravity), inPlayerGravity? Globals.CurrentGravityController.Down : Vector3.down, out RaycastHit hit, maxDistance, groundLayers);
 			distance = didHit? Mathf.Max(hit.distance - OFFSET, 0) : Mathf.Infinity;
 
 			return didHit && hit.distance < HIT_DISTANCE;
 		}
-		public bool Check(Vector3 pos) {
-			return Check(pos, out float _);
+		public bool Check(Vector3 pos, bool inPlayerGravity = true) {
+			return Check(pos, out float _, inPlayerGravity);
 		}
 	}
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace Player {
-	[CreateAssetMenu]
+	[CreateAssetMenu(menuName = "Data/Player/Movement")]
 	public class MovementData : ScriptableObject {
 		[Header("Running")]
 		public float acceleration;
@@ -12,7 +12,6 @@ namespace Player {
 
 		[Header("Jumping")]
 		public float jumpPower;
-		public LayerMask jumpLayer;
 		public float nearGroundDistance; // When the player is close to the ground, jumps are buffered instead of triggering double jumps
 		public int coyoteTime;
 

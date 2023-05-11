@@ -4,6 +4,9 @@ using UnityEngine;
 using Player;
 
 public static class Globals {
+	public static GlobalsController CurrentController;
+
 	public static Player.Player CurrentPlayer;
 	public static Gravity CurrentGravityController;
+	public static ConstantData CurrentConstants;
 }

@@ -11,18 +11,22 @@ namespace PhysicsTools {
 
 		private PhysicMaterial frictionMaterial;
 		private Util.GroundDetector groundDetector;
+		private GravityEffector gravityEffector;
 
 		private Collider col;
 		private void Awake() {
 			col = GetComponent<Collider>();
 
 			frictionMaterial = col.material;
-			if (! m_manageByScript) groundDetector = new(col.bounds.size.y, m_groundLayers);
+			if (! m_manageByScript) {
+				groundDetector = new(col.bounds.size.y, m_groundLayers);
+				gravityEffector = GetComponent<GravityEffector>();
+			}
 		}
 
 		private void FixedUpdate() {
 			if (! m_manageByScript) {
-				Tick(groundDetector.Check(transform.position));
+				Tick(groundDetector.Check(transform.position, gravityEffector == null || gravityEffector.InPlayerGravity));
 			}
 		}
 

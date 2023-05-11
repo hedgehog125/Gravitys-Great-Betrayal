@@ -57,9 +57,10 @@ namespace Player {
 			frictionEffector = GetComponent<FrictionEffector>();
 			player = GetComponent<Player>();
 			cam = Camera.main;
-
+		}
+		private void Start() {
 			Collider col = GetComponent<Collider>();
-			groundDetector = new(col.bounds.size.y, m_moveData.jumpLayer, m_moveData.nearGroundDistance);
+			groundDetector = new(col.bounds.size.y, Globals.CurrentConstants.groundLayers, m_moveData.nearGroundDistance);
 		}
 
 		private void FixedUpdate() {
