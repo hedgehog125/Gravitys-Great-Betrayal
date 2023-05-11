@@ -121,12 +121,7 @@ namespace Player {
 			if (Globals.CurrentGravityController.Direction == 5) player.VisibleController.LookAngle += 180;
 			// ^ Already spent an hour trying to fix this properly, so a bodge will have to do for now
 
-			{
-				Vector2 asVec2 = new(vel.x, vel.z);
-				asVec2 = asVec2.normalized;
-
-				currentTurnAmount = Vector3.Angle(new(asVec2.x, 0, asVec2.y), moveDirection);
-			}
+			currentTurnAmount = Util.GetHorizontalTurnAmount(vel, moveDirection);
 			facingDirection = moveDirection;
 
 
@@ -195,9 +190,9 @@ namespace Player {
 								+ Mathf.Pow(m_moveData.midairJumpPower, m_moveData.midairJumpYVelReduction)
 							, 1 / m_moveData.midairJumpYVelReduction);
 
-							float multiplier = (inputIsNeutral || currentTurnAmount > m_moveData.doubleJumpSubtractiveMinTurn)?
-								m_moveData.doubleJumpSubtractiveMultiplier
-								: m_moveData.doubleJumpAdditiveMultiplier
+							float multiplier = (inputIsNeutral || currentTurnAmount < m_moveData.doubleJumpSubtractiveMinTurn)?
+								m_moveData.doubleJumpAdditiveMultiplier
+								: m_moveData.doubleJumpSubtractiveMultiplier
 							;
 							vel = Util.MultiplyXZMagnitude(vel, multiplier);
 

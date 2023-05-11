@@ -16,9 +16,6 @@ MonoBehaviour:
   airAcceleration: 0.225
   maxSpeed: 5
   jumpPower: 2.5
-  jumpLayer:
-    serializedVersion: 2
-    m_Bits: 641
   nearGroundDistance: 0.35
   coyoteTime: 7
   maxJumpBufferTime: 3
@@ -40,5 +37,5 @@ MonoBehaviour:
   airTurnAccelerationMultiplier: 1.25
   doubleJumpSubtractiveMinTurn: 100
   doubleJumpAdditiveMultiplier: 0.9
-  doubleJumpSubtractiveMultiplier: 0.3
+  doubleJumpSubtractiveMultiplier: 0.25
   topDownThreshold: 0.1

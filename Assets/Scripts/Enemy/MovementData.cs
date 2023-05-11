@@ -8,6 +8,11 @@ namespace Enemy {
 		public float acceleration;
 		public float maxSpeed;
 
+		public float jumpPower;
+		public int jumpCooldown;
+
 		public int forgetTime;
+		public float minTargetDistance; // The enemy can get closer than this, but it'll start to stop after this point
+		public int stuckTime;
 	}
 }

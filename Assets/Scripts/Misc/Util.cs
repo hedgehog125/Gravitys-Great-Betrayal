@@ -25,6 +25,13 @@ public static class Util {
 	public static Vector3Int RoundVector(Vector3 vec) {
 		return new(Mathf.RoundToInt(vec.x), Mathf.RoundToInt(vec.y), Mathf.RoundToInt(vec.z));
 	}
+	public static float GetHorizontalTurnAmount(Vector3 adjustedVel, Vector3 moveDirection) {
+		Vector3 withoutY = adjustedVel;
+		withoutY.y = 0;
+		withoutY = withoutY.normalized;
+
+		return Vector3.Angle(withoutY, moveDirection);
+	}
 
 	public static Vector2 RotateAroundOrigin(Vector2 point, float radians) {
 		float sin = Mathf.Sin(-radians);

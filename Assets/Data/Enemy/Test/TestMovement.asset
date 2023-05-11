@@ -12,6 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 373a8a3a068dd264ebf85a887cc7b83d, type: 3}
   m_Name: TestMovement
   m_EditorClassIdentifier: 
-  acceleration: 0.25
-  maxSpeed: 2.5
-  forgetTime: 50
+  acceleration: 0.45
+  maxSpeed: 2
+  jumpPower: 10
+  jumpCooldown: 50
+  forgetTime: 250
+  minTargetDistance: 0.25
+  stuckTime: 15
