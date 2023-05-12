@@ -2,6 +2,7 @@ using PhysicsTools;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 namespace Player { 
@@ -117,15 +118,18 @@ namespace Player {
 
 			vel += moveDirection * (moveAmount * acceleration);
 
-			player.VisibleController.LookAngle = Vector3.SignedAngle(ADJUSTED_FORWARD, moveDirection, ADJUSTED_UP);
-			if (Globals.CurrentGravityController.Direction == 5) player.VisibleController.LookAngle += 180;
-			// ^ Already spent an hour trying to fix this properly, so a bodge will have to do for now
+			SetVisibleLookAngle(moveDirection);
 
 			currentTurnAmount = Util.GetHorizontalTurnAmount(vel, moveDirection);
 			facingDirection = moveDirection;
 
 
 			return false;
+		}
+		private void SetVisibleLookAngle(Vector3 moveDirection) {
+			player.VisibleController.LookAngle = Vector3.SignedAngle(ADJUSTED_FORWARD, moveDirection, ADJUSTED_UP);
+			if (Globals.CurrentGravityController.Direction == 5) player.VisibleController.LookAngle += 180;
+			// ^ Already spent an hour trying to fix this properly, so a bodge will have to do for now
 		}
 		private void CoyoteTick(bool onGround) {
 			if (onGround) {
@@ -308,6 +312,11 @@ namespace Player {
 
 			switchGravityInput = false;
 			switchGravityUpInput = false;
+		}
+
+		public void ResetFacingDirection() {
+			facingDirection = ADJUSTED_FORWARD;
+			SetVisibleLookAngle(ADJUSTED_FORWARD);
 		}
 
 		#region Tests

@@ -17,5 +17,5 @@ MonoBehaviour:
   jumpPower: 10
   jumpCooldown: 50
   forgetTime: 250
-  minTargetDistance: 0.25
+  minTargetDistance: 0.2
   stuckTime: 15

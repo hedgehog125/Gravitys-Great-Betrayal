@@ -8,9 +8,11 @@ namespace Player {
 	public class Player : MonoBehaviour {
 		[SerializeField] private Visible m_visibleController;
 
+		private Movement moveController;
 		private readonly UnityEvent lookInputEvent = new();
 
 		[HideInInspector] public Visible VisibleController { get => m_visibleController; }
+		[HideInInspector] public Health HealthController { get; private set; }
 
 		// Note that these are independent. Scaled is from inputs that are already scaled like mice and unscaled is for controllers
 		[HideInInspector] public Vector2 ScaledLookInput { get; private set; }
@@ -24,8 +26,17 @@ namespace Player {
 			lookInputEvent.Invoke();
 		}
 
+		private void OnDeath() {
+			moveController.ResetFacingDirection();
+			Globals.CurrentGravityController.ChangeDirection(0);
+		}
+
 		private void Awake() {
+			HealthController = GetComponent<Health>();
+			moveController = GetComponent<Movement>();
 			Globals.CurrentPlayer = this;
+
+			HealthController.ListenForDeath(OnDeath);
 		}
 
 		public void ListenForLookInput(UnityAction callback) {

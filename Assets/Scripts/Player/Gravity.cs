@@ -31,8 +31,8 @@ namespace Player {
 
 		[HideInInspector] public LayerMask Layer { get; private set; }
 		[HideInInspector] public Vector3 AccelerationPerTick { get; private set; }
-		[HideInInspector] public int Direction;
-		[HideInInspector] public Vector3 Down;
+		[HideInInspector] public int Direction { get; private set; }
+		[HideInInspector] public Vector3 Down { get; private set; }
 		#endregion
 
 

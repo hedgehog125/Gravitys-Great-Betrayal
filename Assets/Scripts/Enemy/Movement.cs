@@ -15,6 +15,7 @@ namespace Enemy {
 		[SerializeField] private Collider m_rangeCollider;
 
 		private Rigidbody rb;
+		private Collider col;
 		private FrictionEffector frictionEffector;
 		private GravityEffector gravityEffector;
 		private Player.Player player;
@@ -47,17 +48,16 @@ namespace Enemy {
 
 		private void Awake() {
 			rb = GetComponent<Rigidbody>();
+			col = GetComponent<Collider>();
 			frictionEffector = GetComponent<FrictionEffector>();
 			gravityEffector = GetComponent<GravityEffector>();
 
-			Collider col = GetComponent<Collider>();
 			raycastOffset = (col.bounds.size.magnitude / 2) + MARGIN;
-
-			groundDetector = new(col.bounds.size.y, Globals.CurrentConstants.groundLayers);
 		}
 
 		private void Start() {
 			player = Globals.CurrentPlayer;
+			groundDetector = new(col.bounds.size.y, Globals.CurrentConstants.groundLayers);
 		}
 
 		private void FixedUpdate() {

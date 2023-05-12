@@ -222,6 +222,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 224195279}
+  - component: {fileID: 224195280}
   m_Layer: 5
   m_Name: Health
   m_TagString: Untagged
@@ -249,6 +250,23 @@ RectTransform:
   m_AnchoredPosition: {x: 25, y: -25}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0, y: 1}
+--- !u!114 &224195280
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 224195278}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c24f7ea39ad5e64babf8e70568bdf06, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_heartPrefab: {fileID: 2703343817679610048, guid: 8fd73dc7f0fa99146bad3f9231b374f5,
+    type: 3}
+  heartSprite: {fileID: 21300000, guid: 309339bc9e3b8704a8f41fb43d378fe2, type: 3}
+  emptyHeartSprite: {fileID: 21300000, guid: 3f951031b0fc43542827b048b0a8f9b8, type: 3}
+  m_heartSpacing: 100
 --- !u!1001 &626730262
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1069,7 +1087,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 179fce41139a8bd4383cbd1829220648, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_healthBar: {fileID: 0}
+  m_healthBar: {fileID: 224195280}
 --- !u!1001 &1690786811
 PrefabInstance:
   m_ObjectHideFlags: 0
