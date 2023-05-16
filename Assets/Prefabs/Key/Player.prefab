@@ -173,8 +173,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_areaObject: {fileID: 1864248190208493990}
-  Direction: 0
-  Down: {x: 0, y: 0, z: 0}
 --- !u!54 &1864248190455188300
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -273,6 +271,7 @@ MonoBehaviour:
   m_renderers:
   - {fileID: 7447213982136750529}
   - {fileID: 1394878906821555142}
+  rotateSpeed: 3.6
   LookAngle: 0
 --- !u!1 &1916802458357881247
 GameObject:
