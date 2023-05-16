@@ -29,7 +29,7 @@ MonoBehaviour:
   speedForMaxJumpSpeedIncrease: 5
   gravitySwitchCooldown: 25
   maxMidairGravitySwitches: 1
-  gravitySwitchFloatTime: 10
+  gravitySwitchFloatTime: 25
   neutralSpeedMultiplier: 0.96
   airNeutralSpeedMultiplier: 0.975
   turnMinChange: 100

@@ -271,7 +271,7 @@ MonoBehaviour:
   m_renderers:
   - {fileID: 7447213982136750529}
   - {fileID: 1394878906821555142}
-  rotateSpeed: 3.6
+  rotateTime: 0.5
   LookAngle: 0
 --- !u!1 &1916802458357881247
 GameObject:

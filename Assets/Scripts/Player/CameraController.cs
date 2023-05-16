@@ -15,13 +15,10 @@ namespace Player {
 			Transform target = Globals.CurrentPlayer.VisibleController.transform;
 			m_defaultVCam.Follow = target;
 			m_defaultVCam.LookAt = target;
-
-			Globals.CurrentGravityController.Listen(OnGravityChange);
-			OnGravityChange();
 		}
 
-		private void OnGravityChange() {
-			m_cameraUpController.Up = Globals.CurrentGravityController.Apply(Vector3.up);
+		private void Update() {
+			m_cameraUpController.Up = Globals.CurrentPlayer.VisibleController.transform.up;
 		}
 	}
 }

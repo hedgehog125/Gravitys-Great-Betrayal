@@ -6,38 +6,48 @@ namespace Player {
 	public class Visible : MonoBehaviour {
 		[SerializeField] private float m_transparentCameraDistance;
 		[SerializeField] private List<MeshRenderer> m_renderers;
-		[SerializeField] private float rotateSpeed;
+		[SerializeField] private float rotateTime; // In seconds
 
 		[HideInInspector] public float LookAngle;
+
+		private int directionWas;
+		private float currentRotateRatio;
+		private float rotateRatioPerSecond;
+		private Quaternion rotateStartRotation;
 
 		private Camera cam;
 		private void Awake() {
 			cam = Camera.main;
 		}
 		private void Start() {
-			transform.eulerAngles = Gravity.Rotations[Globals.CurrentGravityController.Direction];
+			directionWas = Globals.CurrentGravityController.Direction;
+			transform.eulerAngles = Gravity.Rotations[directionWas];
+			rotateStartRotation = transform.rotation;
+
+			rotateRatioPerSecond = 1 / rotateTime;
 		}
 
 		private void Update() {
-			transform.eulerAngles = transform.eulerAngles;
-			Debug.Log(transform.eulerAngles);
-			return;
-			{
-				Vector3 targetRotation = Gravity.Rotations[Globals.CurrentGravityController.Direction];
-				Vector3 rot = transform.eulerAngles;
-				for (int i = 0; i < 3; i++) {
-					float adjusted = (rot[i] + 180) % 360;
-					float diffToTarget = ((targetRotation[i] + 180) % 360) - adjusted;
-
-					rot[i] = Mathf.Abs(diffToTarget) < rotateSpeed?
-						targetRotation[i]
-						: rot[i] + (diffToTarget > 0? rotateSpeed : -rotateSpeed)
-					;
-				}
-				transform.eulerAngles = rot;
+			int targetDirectionID = Globals.CurrentGravityController.Direction;
+			Vector3 targetRotation = Gravity.Rotations[targetDirectionID];
+			if (targetDirectionID == directionWas) {
+				transform.eulerAngles = targetRotation;
 			}
+			else {
+				Quaternion targetAsQuaterion = Quaternion.Euler(targetRotation);
 
+				currentRotateRatio += rotateRatioPerSecond * Time.deltaTime;
+				if (currentRotateRatio >= 1f) {
+					transform.rotation = targetAsQuaterion;
 
+					directionWas = targetDirectionID;
+					currentRotateRatio = 0;
+					rotateStartRotation = targetAsQuaterion;
+				}
+				else {
+					transform.rotation = Quaternion.Slerp(rotateStartRotation, targetAsQuaterion, currentRotateRatio);
+				}
+			}
 			m_renderers[0].transform.localEulerAngles = new Vector3(0, LookAngle, 0);
 
 			if (Vector3.Distance(transform.position, cam.transform.position) < m_transparentCameraDistance) {
