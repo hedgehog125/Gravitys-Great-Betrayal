@@ -45,7 +45,7 @@ namespace Player {
 					rotateStartRotation = targetAsQuaterion;
 				}
 				else {
-					transform.rotation = Quaternion.Slerp(rotateStartRotation, targetAsQuaterion, currentRotateRatio);
+					transform.rotation = Quaternion.Lerp(rotateStartRotation, targetAsQuaterion, currentRotateRatio);
 				}
 			}
 			m_renderers[0].transform.localEulerAngles = new Vector3(0, LookAngle, 0);
