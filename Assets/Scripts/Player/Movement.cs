@@ -239,7 +239,7 @@ namespace Player {
 		}
 
 		private void GravityTick(bool onGround) {
-			if (onGround || coyoteTick != -1) {
+			if ((onGround || coyoteTick != -1) && gravitySwitchCooldownTick == -1) {
 				midairGravitySwitchCount = 0;
 			}
 
