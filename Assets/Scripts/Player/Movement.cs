@@ -2,7 +2,6 @@ using PhysicsTools;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 namespace Player { 
@@ -41,6 +40,7 @@ namespace Player {
 		private int jumpHoldTick = -1;
 		private int midairJumpCount;
 		private int coyoteTick = -1;
+		private float[] speedHistory; // Used for the jump increase with speed
 
 		private Vector3 facingDirection = ADJUSTED_FORWARD;
 		private float currentTurnAmount;
@@ -58,6 +58,8 @@ namespace Player {
 			frictionEffector = GetComponent<FrictionEffector>();
 			player = GetComponent<Player>();
 			cam = Camera.main;
+
+			speedHistory = new float[m_moveData.jumpSpeedHistoryOffset];
 		}
 		private void Start() {
 			Collider col = GetComponent<Collider>();
@@ -71,6 +73,7 @@ namespace Player {
 			
 
 			bool inputIsNeutral = MoveTick(ref vel, onGround);
+			SpeedHistoryTick(vel); // Uncapped speed is used
 			CoyoteTick(onGround);
 			JumpTick(ref vel, onGround, nearGround, inputIsNeutral);
 			VelocityTick(ref vel, onGround, inputIsNeutral);
@@ -224,8 +227,9 @@ namespace Player {
 		private void ActiveJumpTick(ref Vector3 vel) {
 			float multiplierFromHold = 1 / (Mathf.Sqrt(jumpHoldTick * m_moveData.jumpHoldCurveSteepness) + 1);
 
-			Vector2 speed2 = new(vel.x, vel.z); // Note: this might have increased for this frame but it hasn't been capped yet
-			float multiplierFromSpeed = jumpHoldTick == 0? Mathf.Min(speed2.magnitude / m_moveData.speedForMaxJumpSpeedIncrease, 1) : 0;
+			float speed = Mathf.Min(speedHistory);
+			float multiplierFromSpeed = jumpHoldTick == 0? Mathf.Min(speed / m_moveData.speedForMaxJumpSpeedIncrease, 1) : 0;
+			if (jumpHoldTick == 0) Debug.Log(multiplierFromSpeed);
 			vel.y += (m_moveData.jumpPower * multiplierFromHold) + (m_moveData.maxJumpSpeedIncrease * multiplierFromSpeed);
 		}
 
@@ -312,6 +316,17 @@ namespace Player {
 
 			switchGravityInput = false;
 			switchGravityUpInput = false;
+		}
+		private void SpeedHistoryTick(Vector3 vel) {
+			Vector2 speed2 = new(vel.x, vel.z);
+			float currentSpeed = speed2.magnitude;
+
+			float last = currentSpeed;
+			for (int i = 0; i < speedHistory.Length; i++) {
+				float was = speedHistory[i];
+				speedHistory[i] = last;
+				last = was;
+			}
 		}
 
 		public void ResetFacingDirection() {

@@ -27,6 +27,7 @@ namespace Player {
 
 		public float maxJumpSpeedIncrease;
 		public float speedForMaxJumpSpeedIncrease; // The speed needed to get the maximum increase due to speed
+		public int jumpSpeedHistoryOffset; // The number of ticks to look back on the player's speed when working out the jump height
 
 		[Header("Gravity Switching")]
 		public int gravitySwitchCooldown;
