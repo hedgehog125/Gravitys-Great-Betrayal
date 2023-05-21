@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 
@@ -20,6 +21,15 @@ public class StaticGameObject : MonoBehaviour {
 	#if UNITY_EDITOR
 	private void Reset() {
 		gameObject.isStatic = true;
+		if (GetComponent<Renderer>() == null) {
+			for (int i = 0; i < transform.childCount; i++) {
+				Transform child = transform.GetChild(i);
+				if (child.GetComponent<StaticGameObject>() == null) child.AddComponent<StaticGameObject>();
+			}
+
+			DestroyImmediate(this);
+			return;
+		}
 	}
 
 	private void Update() {

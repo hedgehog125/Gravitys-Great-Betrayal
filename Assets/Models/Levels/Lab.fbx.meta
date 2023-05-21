@@ -7,6 +7,11 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
+      name: DarkRoom
+    second: {fileID: 2100000, guid: 245a3e6acb462f547a03b6ffafbffcdc, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
       name: Glass
     second: {fileID: 2100000, guid: a6d99c8f40d384b4b81dfa9c346bce84, type: 2}
   - first:

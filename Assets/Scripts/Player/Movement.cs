@@ -229,7 +229,6 @@ namespace Player {
 
 			float speed = Mathf.Min(speedHistory);
 			float multiplierFromSpeed = jumpHoldTick == 0? Mathf.Min(speed / m_moveData.speedForMaxJumpSpeedIncrease, 1) : 0;
-			if (jumpHoldTick == 0) Debug.Log(multiplierFromSpeed);
 			vel.y += (m_moveData.jumpPower * multiplierFromHold) + (m_moveData.maxJumpSpeedIncrease * multiplierFromSpeed);
 		}
 
