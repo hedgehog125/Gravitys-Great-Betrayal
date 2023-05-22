@@ -7,6 +7,8 @@ public class GlobalsController : MonoBehaviour {
 
 	private void Awake() {
 		if (Globals.CurrentController != null) {
+			Globals.CurrentConstants = m_constants;
+
 			Destroy(gameObject);
 			return;
 		}
