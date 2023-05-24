@@ -292,12 +292,6 @@ PrefabInstance:
     m_RemovedComponents: []
     m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: 6333b8b1d863baa4ab57642052581d29, type: 3}
---- !u!23 &1394878906821555142 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 4254038251602642293, guid: 6333b8b1d863baa4ab57642052581d29,
-    type: 3}
-  m_PrefabInstance: {fileID: 2905661483985385139}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1864248191466291004 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3570748002911422863, guid: 6333b8b1d863baa4ab57642052581d29,
@@ -323,14 +317,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_transparentCameraDistance: 2.5
-  m_renderers:
-  - {fileID: 7447213982136750529}
-  - {fileID: 1394878906821555142}
+  m_modelRoot: {fileID: 5380693056521542060}
   rotateTime: 0.5
   LookAngle: 0
---- !u!23 &7447213982136750529 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 5695692408087308146, guid: 6333b8b1d863baa4ab57642052581d29,
+--- !u!4 &5380693056521542060 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7133407596594802463, guid: 6333b8b1d863baa4ab57642052581d29,
     type: 3}
   m_PrefabInstance: {fileID: 2905661483985385139}
   m_PrefabAsset: {fileID: 0}

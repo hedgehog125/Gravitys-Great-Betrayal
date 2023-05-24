@@ -1,3 +1,4 @@
+using Array = System.Array;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,7 +6,7 @@ using UnityEngine;
 namespace Player {
 	public class Visible : MonoBehaviour {
 		[SerializeField] private float m_transparentCameraDistance;
-		[SerializeField] private List<MeshRenderer> m_renderers;
+		[SerializeField] private Transform m_modelRoot;
 		[SerializeField] private float rotateTime; // In seconds
 
 		[HideInInspector] public float LookAngle;
@@ -16,8 +17,10 @@ namespace Player {
 		private Quaternion rotateStartRotation;
 
 		private Camera cam;
+		private MeshRenderer[] renderers;
 		private void Awake() {
 			cam = Camera.main;
+			renderers = GetComponentsInChildren<MeshRenderer>();
 		}
 		private void Start() {
 			directionWas = Globals.CurrentGravityController.Direction;
@@ -48,13 +51,13 @@ namespace Player {
 					transform.rotation = Quaternion.Lerp(rotateStartRotation, targetAsQuaterion, currentRotateRatio);
 				}
 			}
-			m_renderers[0].transform.localEulerAngles = new Vector3(0, LookAngle, 0);
+			m_modelRoot.localEulerAngles = new Vector3(0, LookAngle, 0);
 
 			if (Vector3.Distance(transform.position, cam.transform.position) < m_transparentCameraDistance) {
-				m_renderers.ForEach(ren => ren.material.SetFloat("Alpha", 0.25f));
+				Array.ForEach(renderers, ren => ren.material.SetFloat("Alpha", 0.25f));
 			}
 			else {
-				m_renderers.ForEach(ren => ren.material.SetFloat("Alpha", 1f));
+				Array.ForEach(renderers, ren => ren.material.SetFloat("Alpha", 1f));
 			}
 		}
 	}

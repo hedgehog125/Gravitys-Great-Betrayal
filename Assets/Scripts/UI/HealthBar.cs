@@ -23,7 +23,9 @@ namespace UI {
 				GameObject heart = Instantiate(m_heartPrefab, transform);
 				RectTransform rect = heart.GetComponent<RectTransform>();
 
-				heart.transform.Translate(i * m_heartSpacing, 0, 0);
+				Vector2 pos = rect.anchoredPosition;
+				pos.x += m_heartSpacing * i;
+				rect.anchoredPosition = pos;
 
 				heartRenderers[i] = heart.GetComponent<Image>();
 			}
