@@ -94,18 +94,16 @@ namespace Player {
 			}
 
 			Vector3 moveDirection;
-			Vector3 normalizedCamForward;
 			{
 				Vector3 forward = cam.transform.forward;
 				forward = Globals.CurrentGravityController.Adjust(forward);
 				forward.y = 0;
-				normalizedCamForward = forward.normalized;
 
-				if (forward.magnitude < m_moveData.topDownThreshold) { // Somewhat of a niche situation, just use the use the gravity remappings
+				if (forward.magnitude < m_moveData.topDownThreshold) { // Somewhat of a niche situation, just use the gravity remappings
 					moveDirection = ADJUSTED_FORWARD;
 				}
 				else {
-					moveDirection = normalizedCamForward;
+					moveDirection = forward.normalized;
 				}
 			}
 
@@ -273,36 +271,33 @@ namespace Player {
 					if (vel.y < 0) vel.y = 0;
 					rb.velocity = gravityController.Apply(vel);
 
-
+					bool valid = true;
 					if (switchGravityInput) {
 						Vector3 appliedFacing = gravityController.Apply(facingDirection);
 
-						// Find the main axis
-						float largest = -1;
-						int largestID = -1;
-						for (int i = 0; i < 3; i++) {
-							float abs = Mathf.Abs(appliedFacing[i]);
-							if (abs > largest) {
-								largest = abs;
-								largestID = i;
-							}
-						}
+						int largestID = Util.GetAbsLargestAxis(appliedFacing);
 						Vector3Int axisDirection = Vector3Int.zero;
-						axisDirection[largestID] = appliedFacing[largestID] > 0 ? 1 : -1;
+						axisDirection[largestID] = appliedFacing[largestID] > 0? 1 : -1;
 
-
-						gravityController.ChangeDirection(Gravity.DirectionToID(axisDirection));
+						int newDirectionID = Gravity.DirectionToID(axisDirection);
+						if (newDirectionID != gravityController.Direction) {
+							gravityController.ChangeDirection(newDirectionID);
+							valid = true;
+						}
 					}
 					else {
 						gravityController.ChangeDirection(Gravity.DirectionToID(
 							Util.RoundVector(gravityController.Apply(ADJUSTED_UP))
 						));
+						valid = true;
 					}
 
-					gravitySwitchCooldownTick = 0;
-					gravitySwitchFloatTick = 0;
-					midairGravitySwitchCount++;
-					midairJumpCount = 0;
+					if (valid) {
+						gravitySwitchCooldownTick = 0;
+						gravitySwitchFloatTick = 0;
+						midairGravitySwitchCount++;
+						midairJumpCount = 0;
+					}
 				}
 			}
 

@@ -1,3 +1,4 @@
+using Player;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -43,6 +44,36 @@ public static class Util {
 		);
 		return newPoint;
 	}
+	public static int GetAbsLargestAxis(Vector3 vec) {
+		float largest = -1;
+		int largestID = -1;
+		for (int i = 0; i < 3; i++) {
+			float abs = Mathf.Abs(vec[i]);
+			if (abs > largest) {
+				largest = abs;
+				largestID = i;
+			}
+		}
+
+		return largestID;
+	}
+	public static Vector3Int GetAbsLargestAxisAsVec(Vector3 vec) {
+		int largestAxis = GetAbsLargestAxis(vec);
+		Vector3Int asVec = new(0, 0, 0);
+		asVec[largestAxis] = vec[largestAxis] > 0? 1 : -1;
+
+		return asVec;
+	}
+
+	public static Vector3 RemoveAdjustedY(Vector3 vec) {
+		return RemoveAdjustedY(vec, Globals.CurrentGravityController.Direction);
+	}
+	public static Vector3 RemoveAdjustedY(Vector3 vec, int gravityDirectionID) {
+		Vector3 adjusted = Gravity.AdjustFromDirection(vec, gravityDirectionID);
+		adjusted.y = 0;
+		return Gravity.ApplyToDirection(adjusted, gravityDirectionID);
+	}
+
 
 	public class GroundDetector {
 		private const float OFFSET = 0.025f;
