@@ -8,11 +8,11 @@ using UnityEngine.UIElements;
 namespace Player {
 	public class Visible : MonoBehaviour {
 		private static readonly Vector2[] RELATIVE_GRAVITY_CAM_ROTATIONS = {
-			// +X is right relative to the camera, snapped to the closest axis
+			// +X is to the right on the screen, +Y is rotating to look upwards
 			new(90, 0), // Left
 			new(-90, 0), // Right
-			new(90, 0), // Forwards
-			new(-90, 0), // Backwards
+			new(0, -90), // Forwards
+			new(0, 90), // Backwards
 			new(180, 0) // Up, rotate to the right
 		};
 
@@ -27,7 +27,9 @@ namespace Player {
 		private float rotateRatioPerSecond;
 		private Quaternion rotateStartRotation;
 		private int relativeCamRotateDir = -1;
-		private int[] rotateCameraAxes = { 0, 0 }; // The axis that was moved the camera forwards and to the right before gravity was switched
+		private Vector2Int rotateCameraAxes; // The axis that was moved the camera forwards and to the right before gravity was switched
+		private Vector3 rotateCamUp;
+		private Vector3 rotateCamRight;
 
 		private Camera cam;
 		private MeshRenderer[] renderers;
@@ -83,8 +85,10 @@ namespace Player {
 							relativeCamRotateDir++;
 						}
 
-						rotateCameraAxes[0] = Util.GetAbsLargestAxis(cam.transform.right);
-						rotateCameraAxes[1] = Util.GetAbsLargestAxis(cam.transform.forward);
+						rotateCameraAxes.x = Util.GetAbsLargestAxis(cam.transform.forward, true);
+						rotateCameraAxes.y = Util.GetAbsLargestAxis(cam.transform.right, true);
+						rotateCamUp = cam.transform.up;
+						rotateCamRight = cam.transform.right;
 
 						Debug.Log($"Relative ID: {relativeCamRotateDir}. Rotating on: {String.Join(", ", rotateCameraAxes)}");
 					}
@@ -95,11 +99,19 @@ namespace Player {
 					else {
 						Vector3 targetRotateAmount = new(0, 0, 0);
 						Vector2 relativeRotation = RELATIVE_GRAVITY_CAM_ROTATIONS[relativeCamRotateDir];
-						targetRotateAmount[rotateCameraAxes[0]] = relativeRotation.x;
-						targetRotateAmount[rotateCameraAxes[1]] = relativeRotation.y;
+
+						int xAxisID = Mathf.Abs(rotateCameraAxes.x) - 1;
+						int xAxisSign = (int)Mathf.Sign(rotateCameraAxes.x);
+						int yAxisID = Mathf.Abs(rotateCameraAxes.y) - 1;
+						int yAxisSign = (int)Mathf.Sign(rotateCameraAxes.y);
+
+						targetRotateAmount[xAxisID] = relativeRotation.x * xAxisSign;
+						targetRotateAmount[yAxisID] = relativeRotation.y * yAxisSign;
 
 						transform.rotation = rotateStartRotation;
-						transform.Rotate(targetRotateAmount * currentRotateRatio);
+						transform.RotateAround(transform.position, rotateCamUp, relativeRotation.x * currentRotateRatio);
+						transform.RotateAround(transform.position, rotateCamRight, relativeRotation.y * currentRotateRatio);
+						//transform.Rotate(targetRotateAmount * currentRotateRatio);
 					}
 				}
 			}

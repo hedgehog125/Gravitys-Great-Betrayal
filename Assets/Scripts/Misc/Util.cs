@@ -44,7 +44,7 @@ public static class Util {
 		);
 		return newPoint;
 	}
-	public static int GetAbsLargestAxis(Vector3 vec) {
+	public static int GetAbsLargestAxis(Vector3 vec, bool includeSign = false) {
 		float largest = -1;
 		int largestID = -1;
 		for (int i = 0; i < 3; i++) {
@@ -55,7 +55,8 @@ public static class Util {
 			}
 		}
 
-		return largestID;
+		if (includeSign) return (largestID + 1) * (vec[largestID] > 0? 1 : -1);
+		else return largestID;
 	}
 	public static Vector3Int GetAbsLargestAxisAsVec(Vector3 vec) {
 		int largestAxis = GetAbsLargestAxis(vec);
