@@ -9,8 +9,8 @@ namespace Player {
 	public class Visible : MonoBehaviour {
 		private static readonly Vector2[] RELATIVE_GRAVITY_CAM_ROTATIONS = {
 			// +X is to the right on the screen, +Y is rotating to look upwards
-			new(90, 0), // Left
-			new(-90, 0), // Right
+			new(-90, 0), // Left
+			new(90, 0), // Right
 			new(0, -90), // Forwards
 			new(0, 90), // Backwards
 			new(180, 0) // Up, rotate to the right
@@ -28,8 +28,6 @@ namespace Player {
 		private Quaternion rotateStartRotation;
 		private int relativeCamRotateDir = -1;
 		private Vector2Int rotateCameraAxes; // The axis that was moved the camera forwards and to the right before gravity was switched
-		private Vector3 rotateCamUp;
-		private Vector3 rotateCamRight;
 
 		private Camera cam;
 		private MeshRenderer[] renderers;
@@ -87,8 +85,6 @@ namespace Player {
 
 						rotateCameraAxes.x = Util.GetAbsLargestAxis(cam.transform.forward, true);
 						rotateCameraAxes.y = Util.GetAbsLargestAxis(cam.transform.right, true);
-						rotateCamUp = cam.transform.up;
-						rotateCamRight = cam.transform.right;
 
 						Debug.Log($"Relative ID: {relativeCamRotateDir}. Rotating on: {String.Join(", ", rotateCameraAxes)}");
 					}
@@ -109,9 +105,7 @@ namespace Player {
 						targetRotateAmount[yAxisID] = relativeRotation.y * yAxisSign;
 
 						transform.rotation = rotateStartRotation;
-						transform.RotateAround(transform.position, rotateCamUp, relativeRotation.x * currentRotateRatio);
-						transform.RotateAround(transform.position, rotateCamRight, relativeRotation.y * currentRotateRatio);
-						//transform.Rotate(targetRotateAmount * currentRotateRatio);
+						transform.Rotate(targetRotateAmount * currentRotateRatio);
 					}
 				}
 			}
