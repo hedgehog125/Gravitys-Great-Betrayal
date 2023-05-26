@@ -1,4 +1,5 @@
 using Array = System.Array;
+using String = System.String;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,8 +11,8 @@ namespace Player {
 			// +X is right relative to the camera, snapped to the closest axis
 			new(90, 0), // Left
 			new(-90, 0), // Right
-			new(-90, 0), // Forwards
-			new(90, 0), // Backwards
+			new(90, 0), // Forwards
+			new(-90, 0), // Backwards
 			new(180, 0) // Up, rotate to the right
 		};
 
@@ -25,8 +26,8 @@ namespace Player {
 		private float currentRotateRatio;
 		private float rotateRatioPerSecond;
 		private Quaternion rotateStartRotation;
-		private int relativeRotateDirection = -1;
-		private int rotationCamForwardAxis; // The axis that was moved the camera forwards and backwards before gravity was switched
+		private int relativeCamRotateDir = -1;
+		private int[] rotateCameraAxes = { 0, 0 }; // The axis that was moved the camera forwards and to the right before gravity was switched
 
 		private Camera cam;
 		private MeshRenderer[] renderers;
@@ -60,10 +61,10 @@ namespace Player {
 					directionWas = targetDirectionID;
 					currentRotateRatio = 0;
 					rotateStartRotation = targetAsQuaterion;
-					relativeRotateDirection = -1;
+					relativeCamRotateDir = -1;
 				}
 				else {
-					if (relativeRotateDirection == -1) {
+					if (relativeCamRotateDir == -1) {
 						Vector3[] cameraDirections = {
 							LastDirRemoveY(-cam.transform.right),
 							LastDirRemoveY(cam.transform.right),
@@ -72,27 +73,30 @@ namespace Player {
 							cam.transform.up
 						};
 
-						relativeRotateDirection = 0;
-						while (relativeRotateDirection < cameraDirections.Length) {
-							Vector3Int direction = Util.GetAbsLargestAxisAsVec(cameraDirections[relativeRotateDirection]);
+						relativeCamRotateDir = 0;
+						while (relativeCamRotateDir < cameraDirections.Length) {
+							Vector3Int direction = Util.GetAbsLargestAxisAsVec(cameraDirections[relativeCamRotateDir]);
 
 							if (Gravity.DirectionToID(direction) == targetDirectionID) {
 								break;
 							}
-							relativeRotateDirection++;
+							relativeCamRotateDir++;
 						}
 
-						rotationCamForwardAxis = Util.GetAbsLargestAxis(cam.transform.forward);
+						rotateCameraAxes[0] = Util.GetAbsLargestAxis(cam.transform.right);
+						rotateCameraAxes[1] = Util.GetAbsLargestAxis(cam.transform.forward);
+
+						Debug.Log($"Relative ID: {relativeCamRotateDir}. Rotating on: {String.Join(", ", rotateCameraAxes)}");
 					}
 
-					if (relativeRotateDirection == 5) { // Failsafe
+					if (relativeCamRotateDir == 5) { // Failsafe
 						transform.rotation = Quaternion.Lerp(rotateStartRotation, targetAsQuaterion, currentRotateRatio);
 					}
 					else {
 						Vector3 targetRotateAmount = new(0, 0, 0);
-						//targetRotateAmount[0] = ;
-						//RELATIVE_GRAVITY_CAM_ROTATIONS[relativeRotateDirection];
-
+						Vector2 relativeRotation = RELATIVE_GRAVITY_CAM_ROTATIONS[relativeCamRotateDir];
+						targetRotateAmount[rotateCameraAxes[0]] = relativeRotation.x;
+						targetRotateAmount[rotateCameraAxes[1]] = relativeRotation.y;
 
 						transform.rotation = rotateStartRotation;
 						transform.Rotate(targetRotateAmount * currentRotateRatio);

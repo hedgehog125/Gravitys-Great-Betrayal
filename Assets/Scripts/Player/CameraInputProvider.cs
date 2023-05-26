@@ -12,12 +12,21 @@ namespace Player {
 			scaledLookInput = Globals.CurrentPlayer.ScaledLookInput;
 			unscaledLookInput = Globals.CurrentPlayer.UnscaledLookInput;
 		}
+		private void OnPauseChange() {
+			Cursor.lockState = Globals.CurrentPauseController.IsPaused? CursorLockMode.None : CursorLockMode.Locked;
+		}
 
+		private void Awake() {
+			Cursor.lockState = CursorLockMode.Locked;
+		}
 		private void Start() {
 			Globals.CurrentPlayer.ListenForLookInput(OnLook);
+			Globals.CurrentPauseController.Listen(OnPauseChange);
 		}
 
 		public virtual float GetAxisValue(int axis) {
+			if (Globals.CurrentPauseController.IsPaused) return 0f;
+
 			Vector2 input = scaledLookInput + (unscaledLookInput * (Time.deltaTime * 50));
 
 			if (axis == 0) return input.x;

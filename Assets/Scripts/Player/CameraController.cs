@@ -8,9 +8,6 @@ namespace Player {
 		[SerializeField] private CinemachineFreeLook m_defaultVCam;
 		[SerializeField] private CustomCameraUp m_cameraUpController;
 
-		private void Awake() {
-			Cursor.lockState = CursorLockMode.Locked;
-		}
 		private void Start() {
 			Transform target = Globals.CurrentPlayer.VisibleController.transform;
 			m_defaultVCam.Follow = target;

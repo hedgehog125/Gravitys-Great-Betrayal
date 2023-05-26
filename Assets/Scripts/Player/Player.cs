@@ -10,6 +10,7 @@ namespace Player {
 
 		private Movement moveController;
 		private readonly UnityEvent lookInputEvent = new();
+		private readonly UnityEvent pauseInputEvent = new();
 
 		[HideInInspector] public Visible VisibleController { get => m_visibleController; }
 		[HideInInspector] public Health HealthController { get; private set; }
@@ -24,6 +25,12 @@ namespace Player {
 		private void OnUnscaledLook(InputValue input) {
 			UnscaledLookInput = input.Get<Vector2>();
 			lookInputEvent.Invoke();
+		}
+
+		[HideInInspector] public bool PauseInput { get; private set; }
+		private void OnPause(InputValue input) {
+			PauseInput = input.isPressed;
+			pauseInputEvent.Invoke();
 		}
 
 		private void OnDeath() {
@@ -41,6 +48,9 @@ namespace Player {
 
 		public void ListenForLookInput(UnityAction callback) {
 			lookInputEvent.AddListener(callback);
+		}
+		public void ListenForPauseInput(UnityAction callback) {
+			pauseInputEvent.AddListener(callback);
 		}
 	}
 }

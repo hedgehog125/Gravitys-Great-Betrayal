@@ -9,4 +9,6 @@ public static class Globals {
 	public static Player.Player CurrentPlayer;
 	public static Gravity CurrentGravityController;
 	public static ConstantData CurrentConstants;
+	
+	public static PauseController CurrentPauseController;
 }
