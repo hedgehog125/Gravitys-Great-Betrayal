@@ -27,7 +27,7 @@ namespace Player {
 		private float rotateRatioPerSecond;
 		private Quaternion rotateStartRotation;
 		private int relativeCamRotateDir = -1;
-		private Vector2Int rotateCameraAxes; // The axis that was moved the camera forwards and to the right before gravity was switched
+		private Vector3 targetCamRotateAmount;
 
 		private Camera cam;
 		private MeshRenderer[] renderers;
@@ -47,15 +47,26 @@ namespace Player {
 			Gravity gravityController = Globals.CurrentGravityController;
 
 			int targetDirectionID = gravityController.Direction;
-			Vector3 targetRotation = Gravity.Rotations[targetDirectionID];
+			Vector3 targetPresetRotation = Gravity.Rotations[targetDirectionID];
 			if (targetDirectionID == directionWas) {
-				transform.eulerAngles = targetRotation;
+				transform.eulerAngles = targetPresetRotation;
 			}
 			else {
-				Quaternion targetAsQuaterion = Quaternion.Euler(targetRotation);
+				Quaternion targetAsQuaterion = Quaternion.Euler(targetPresetRotation);
 
 				currentRotateRatio += rotateRatioPerSecond * Time.deltaTime;
 				if (currentRotateRatio >= 1f) {
+					if (relativeCamRotateDir != 5) {
+						Vector3 snappedRotationChange = targetCamRotateAmount;
+						Debug.Log(snappedRotationChange);
+						int previousXAxisID = Util.GetAbsLargestAxis(Gravity.ApplyToDirection(Vector3.forward, directionWas));
+						Debug.Log(previousXAxisID);
+
+						Debug.Log($" -> {targetAsQuaterion.eulerAngles}");
+
+						Debug.Log(Mathf.DeltaAngle(90, 1080));
+						Globals.CurrentCameraController.RotateBy(Mathf.DeltaAngle(targetPresetRotation[previousXAxisID], snappedRotationChange[previousXAxisID]), 0f);
+					}
 					transform.rotation = targetAsQuaterion;
 
 					directionWas = targetDirectionID;
@@ -83,29 +94,35 @@ namespace Player {
 							relativeCamRotateDir++;
 						}
 
-						rotateCameraAxes.x = Util.GetAbsLargestAxis(cam.transform.forward, true);
-						rotateCameraAxes.y = Util.GetAbsLargestAxis(cam.transform.right, true);
+						if (relativeCamRotateDir != 5) {
+							Vector2Int rotateCameraAxes = new(
+								Util.GetAbsLargestAxis(cam.transform.forward, true),
+								Util.GetAbsLargestAxis(cam.transform.right, true)
+							);
 
-						Debug.Log($"Relative ID: {relativeCamRotateDir}. Rotating on: {String.Join(", ", rotateCameraAxes)}");
+							Vector2 relativeRotation = RELATIVE_GRAVITY_CAM_ROTATIONS[relativeCamRotateDir];
+
+							int xAxisID = Mathf.Abs(rotateCameraAxes.x) - 1;
+							int xAxisSign = (int)Mathf.Sign(rotateCameraAxes.x);
+							int yAxisID = Mathf.Abs(rotateCameraAxes.y) - 1;
+							int yAxisSign = (int)Mathf.Sign(rotateCameraAxes.y);
+
+							targetCamRotateAmount = new(0, 0, 0);
+							targetCamRotateAmount[xAxisID] = relativeRotation.x * xAxisSign;
+							targetCamRotateAmount[yAxisID] = relativeRotation.y * yAxisSign;
+							if (directionWas == 1) { // Upside down
+								targetCamRotateAmount[xAxisID] *= -1;
+								targetCamRotateAmount[yAxisID] *= -1;
+							}
+						}
 					}
 
 					if (relativeCamRotateDir == 5) { // Failsafe
 						transform.rotation = Quaternion.Lerp(rotateStartRotation, targetAsQuaterion, currentRotateRatio);
 					}
 					else {
-						Vector3 targetRotateAmount = new(0, 0, 0);
-						Vector2 relativeRotation = RELATIVE_GRAVITY_CAM_ROTATIONS[relativeCamRotateDir];
-
-						int xAxisID = Mathf.Abs(rotateCameraAxes.x) - 1;
-						int xAxisSign = (int)Mathf.Sign(rotateCameraAxes.x);
-						int yAxisID = Mathf.Abs(rotateCameraAxes.y) - 1;
-						int yAxisSign = (int)Mathf.Sign(rotateCameraAxes.y);
-
-						targetRotateAmount[xAxisID] = relativeRotation.x * xAxisSign;
-						targetRotateAmount[yAxisID] = relativeRotation.y * yAxisSign;
-
 						transform.rotation = rotateStartRotation;
-						transform.Rotate(targetRotateAmount * currentRotateRatio);
+						transform.eulerAngles += targetCamRotateAmount * currentRotateRatio;
 					}
 				}
 			}

@@ -74,7 +74,10 @@ public static class Util {
 		adjusted.y = 0;
 		return Gravity.ApplyToDirection(adjusted, gravityDirectionID);
 	}
-
+	public static float WrapAngle(float angle) { // Credit: https://stackoverflow.com/questions/47680017/how-to-limit-angles-in-180-180-range-just-like-unity3d-inspector
+		angle %= 360;
+		return angle > 180? angle - 360 : angle < -180? angle + 360 : angle;
+	}
 
 	public class GroundDetector {
 		private const float OFFSET = 0.025f;
