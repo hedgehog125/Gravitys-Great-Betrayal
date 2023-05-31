@@ -22,6 +22,11 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
+      name: Poison
+    second: {fileID: 2100000, guid: 5ef31575b2876a9499d60d50ebd32cc2, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
       name: Wall
     second: {fileID: 2100000, guid: c5b4d7c470699a8438e3f12fcce9dd90, type: 2}
   materials:

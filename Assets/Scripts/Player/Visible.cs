@@ -58,13 +58,8 @@ namespace Player {
 				if (currentRotateRatio >= 1f) {
 					if (relativeCamRotateDir != 5) {
 						Vector3 snappedRotationChange = targetCamRotateAmount;
-						Debug.Log(snappedRotationChange);
 						int previousXAxisID = Util.GetAbsLargestAxis(Gravity.ApplyToDirection(Vector3.forward, directionWas));
-						Debug.Log(previousXAxisID);
 
-						Debug.Log($" -> {targetAsQuaterion.eulerAngles}");
-
-						Debug.Log(Mathf.DeltaAngle(90, 1080));
 						Globals.CurrentCameraController.RotateBy(Mathf.DeltaAngle(targetPresetRotation[previousXAxisID], snappedRotationChange[previousXAxisID]), 0f);
 					}
 					transform.rotation = targetAsQuaterion;
