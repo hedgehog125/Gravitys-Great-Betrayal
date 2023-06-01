@@ -1,16 +1,3 @@
-# Lighting Data. Credit: https://forum.unity.com/threads/best-practice-how-to-handle-lightingdata-asset-in-git.716831/ by orecros
-**/Lightmap-[0-9]*_comp_dir.png
-**/Lightmap-[0-9]*_comp_dir.png.meta
-**/Lightmap-[0-9]*_comp_shadowmask.png
-**/Lightmap-[0-9]*_comp_shadowmask.png.meta
-**/Lightmap-[0-9]*_comp_light.exr
-**/Lightmap-[0-9]*_comp_light.exr.meta
-**/ReflectionProbe-[0-9]*.exr
-**/ReflectionProbe-[0-9]*.exr.meta
-
-**/LightingData.asset
-**/LightingData.asset.meta
-
 # This .gitignore file should be placed at the root of your Unity project directory
 #
 # Get latest from https://github.com/github/gitignore/blob/master/Unity.gitignore
@@ -82,3 +69,16 @@ crashlytics-build.properties
 # Temporary auto-generated Android Assets
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
+
+# Lighting Data. Credit: https://forum.unity.com/threads/best-practice-how-to-handle-lightingdata-asset-in-git.716831/ by orecros
+**/Lightmap-[0-9]*_comp_dir.png
+**/Lightmap-[0-9]*_comp_dir.png.meta
+**/Lightmap-[0-9]*_comp_shadowmask.png
+**/Lightmap-[0-9]*_comp_shadowmask.png.meta
+**/Lightmap-[0-9]*_comp_light.exr
+**/Lightmap-[0-9]*_comp_light.exr.meta
+**/ReflectionProbe-[0-9]*.exr
+**/ReflectionProbe-[0-9]*.exr.meta
+
+**/LightingData.asset
+**/LightingData.asset.meta
