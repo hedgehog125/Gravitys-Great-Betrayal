@@ -11,11 +11,12 @@ GameObject:
   - component: {fileID: 2235576589447575346}
   - component: {fileID: 2235576589447575345}
   - component: {fileID: 6520789971182340078}
+  - component: {fileID: 2898658007593370084}
   - component: {fileID: 2499470756399686384}
   - component: {fileID: 5302627332547885722}
   - component: {fileID: 7406232772837052531}
   - component: {fileID: 6023787609024193456}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: EnemyBase
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -37,7 +38,7 @@ Transform:
   - {fileID: 7999174238458498418}
   - {fileID: 2235576590018384179}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2235576589447575345
 MonoBehaviour:
@@ -66,7 +67,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_damage: 1
-  m_damageCollider: {fileID: 0}
+  m_includeNonPlayers: 0
+--- !u!114 &2898658007593370084
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2235576589447575344}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 467e5840f50c117468cef725d619f716, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_startHealth: 1
+  m_maxHealth: 1
+  m_invulnerabilityTime: 50
+  m_onDeath: 1
+  RespawnLocation: {x: 0, y: 0, z: 0}
 --- !u!54 &2499470756399686384
 Rigidbody:
   m_ObjectHideFlags: 0

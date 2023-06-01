@@ -32,6 +32,10 @@ namespace Player {
 			switchGravityUpInput = input.isPressed;
 		}
 
+		private	void OnSoftRespawn() {
+			Globals.CurrentGravityController.ChangeDirection(gravityHistoryWhileSafe[^1]);
+		}
+
 		private Util.GroundDetector groundDetector;
 		private int jumpBufferTick = -1;
 		private int jumpBufferHoldTick = -1; // Records how long jump was held in midair
@@ -47,23 +51,29 @@ namespace Player {
 		private int midairGravitySwitchCount;
 		private int gravitySwitchCooldownTick = -1;
 		private int gravitySwitchFloatTick = -1;
+		private int[] gravityHistoryWhileSafe; // Used for soft respawns
 
 
 		private Rigidbody rb;
 		private FrictionEffector frictionEffector;
+		private Health healthController;
 		private Player player;
 		private Camera cam;
 		private void Awake() {
 			rb = GetComponent<Rigidbody>();
 			frictionEffector = GetComponent<FrictionEffector>();
+			healthController = GetComponent<Health>();
 			player = GetComponent<Player>();
 			cam = Camera.main;
 
 			speedHistory = new float[m_moveData.jumpSpeedHistoryOffset];
+			gravityHistoryWhileSafe = new int[healthController.SafeTime];
 		}
 		private void Start() {
 			Collider col = GetComponent<Collider>();
 			groundDetector = new(col.bounds.size.y, Globals.CurrentConstants.groundLayers, m_moveData.nearGroundDistance);
+
+			healthController.ListenForSoftRespawn(OnSoftRespawn);
 		}
 
 		private void FixedUpdate() {
@@ -82,6 +92,10 @@ namespace Player {
 			GravityTick(onGround);
 
 			frictionEffector.Tick(onGround);
+			if (healthController.IsSafe && onGround) {
+				healthController.SoftRespawnLocation = transform.position;
+				Util.InsertAtStartAndShift(Globals.CurrentGravityController.Direction, gravityHistoryWhileSafe);
+			}
 		}
 
 
@@ -315,12 +329,7 @@ namespace Player {
 			Vector2 speed2 = new(vel.x, vel.z);
 			float currentSpeed = speed2.magnitude;
 
-			float last = currentSpeed;
-			for (int i = 0; i < speedHistory.Length; i++) {
-				float was = speedHistory[i];
-				speedHistory[i] = last;
-				last = was;
-			}
+			Util.InsertAtStartAndShift(currentSpeed, speedHistory);
 		}
 
 		public void ResetFacingDirection() {

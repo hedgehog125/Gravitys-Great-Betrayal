@@ -9,6 +9,8 @@ namespace Player {
 		[SerializeField] private Visible m_visibleController;
 
 		private Movement moveController;
+
+		private int lastCheckpointID = -1;
 		private readonly UnityEvent lookInputEvent = new();
 		private readonly UnityEvent pauseInputEvent = new();
 
@@ -51,6 +53,13 @@ namespace Player {
 		}
 		public void ListenForPauseInput(UnityAction callback) {
 			pauseInputEvent.AddListener(callback);
+		}
+
+		public void HandleCheckpoint(int id, Vector3 position) {
+			if (! (id > lastCheckpointID || id == -1)) return;
+
+			lastCheckpointID = id;
+			HealthController.RespawnLocation = position;
 		}
 	}
 }

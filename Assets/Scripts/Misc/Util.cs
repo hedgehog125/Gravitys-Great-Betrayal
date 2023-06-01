@@ -79,6 +79,15 @@ public static class Util {
 		return angle > 180? angle - 360 : angle < -180? angle + 360 : angle;
 	}
 
+	public static void InsertAtStartAndShift<T>(T value, T[] arr) {
+		T last = value;
+		for (int i = 0; i < arr.Length; i++) {
+			T was = arr[i];
+			arr[i] = last;
+			last = was;
+		}
+	}
+
 	public class GroundDetector {
 		private const float OFFSET = 0.025f;
 		private const float HIT_DISTANCE = 0.05f;

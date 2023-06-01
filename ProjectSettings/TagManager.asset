@@ -15,8 +15,8 @@ TagManager:
   - SmallObject
   - Player
   - CameraTransparent
-  - 
-  - 
+  - Enemy
+  - EnemyWall
   - 
   - 
   - 
