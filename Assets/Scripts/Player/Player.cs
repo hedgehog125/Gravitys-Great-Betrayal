@@ -13,6 +13,7 @@ namespace Player {
 		private int lastCheckpointID = -1;
 		private readonly UnityEvent lookInputEvent = new();
 		private readonly UnityEvent pauseInputEvent = new();
+		private readonly UnityEvent mainMenuInputEvent = new();
 
 		[HideInInspector] public Visible VisibleController { get => m_visibleController; }
 		[HideInInspector] public Health HealthController { get; private set; }
@@ -21,7 +22,9 @@ namespace Player {
 		[HideInInspector] public Vector2 ScaledLookInput { get; private set; }
 		[HideInInspector] public Vector2 UnscaledLookInput { get; private set; }
 		private void OnScaledLook(InputValue input) {
-			ScaledLookInput = input.Get<Vector2>();
+			Vector2 unscaledBySensitivity = input.Get<Vector2>();
+
+			ScaledLookInput = unscaledBySensitivity.normalized * (unscaledBySensitivity.magnitude * Globals.CurrentConfig.mouseSensitivity);
 			lookInputEvent.Invoke();
 		}
 		private void OnUnscaledLook(InputValue input) {
@@ -33,6 +36,11 @@ namespace Player {
 		private void OnPause(InputValue input) {
 			PauseInput = input.isPressed;
 			pauseInputEvent.Invoke();
+		}
+		[HideInInspector] public bool MainMenuInput { get; private set; }
+		private void OnMainMenuInput(InputValue input) {
+			MainMenuInput = input.isPressed;
+			mainMenuInputEvent.Invoke();
 		}
 
 		private void OnDeath() {
@@ -53,6 +61,9 @@ namespace Player {
 		}
 		public void ListenForPauseInput(UnityAction callback) {
 			pauseInputEvent.AddListener(callback);
+		}
+		public void ListenForMainMenuInput(UnityAction callback) {
+			mainMenuInputEvent.AddListener(callback);
 		}
 
 		public void HandleCheckpoint(int id, Vector3 position) {

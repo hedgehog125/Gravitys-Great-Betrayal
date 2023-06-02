@@ -5,4 +5,6 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Data/Constants")]
 public class ConstantData : ScriptableObject {
 	public LayerMask groundLayers;
+
+	public string mainMenuScene;
 }

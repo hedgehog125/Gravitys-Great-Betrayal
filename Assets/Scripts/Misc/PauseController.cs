@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 public class PauseController : MonoBehaviour {
 	[SerializeField] private bool m_initiallyAllowPauseInput = true;
@@ -30,6 +31,13 @@ public class PauseController : MonoBehaviour {
 			Time.timeScale = originalTimeScale;
 		}
 	}
+	private void OnMainMenuInput() {
+		if (! IsPaused) return;
+		if (! player.MainMenuInput) return;
+
+		Time.timeScale = originalTimeScale;
+		SceneManager.LoadScene(Globals.CurrentConstants.mainMenuScene);
+	}
 
 	private void Awake() {
 		Globals.CurrentPauseController = this;
@@ -39,6 +47,7 @@ public class PauseController : MonoBehaviour {
 	private void Start() {
 		player = Globals.CurrentPlayer;
 		player.ListenForPauseInput(OnPause);
+		player.ListenForMainMenuInput(OnMainMenuInput);
 	}
 
 	public void TogglePause() {

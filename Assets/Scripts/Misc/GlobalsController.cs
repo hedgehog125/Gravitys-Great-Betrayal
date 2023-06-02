@@ -15,6 +15,14 @@ public class GlobalsController : MonoBehaviour {
 
 		Globals.CurrentController = this;
 		Globals.CurrentConstants = m_constants;
+
+		PlayerConfig config = PlayerConfig.Load();
+		if (config == null) {
+			config = new PlayerConfig();
+			PlayerConfig.Save(config);
+		}
+		Globals.CurrentConfig = config;
+
 		DontDestroyOnLoad(gameObject);
 	}
 }

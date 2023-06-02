@@ -67,6 +67,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "MainMenuInput",
+                    "type": "Value",
+                    "id": "27408a28-e1de-48bf-949c-6ee390739d4a",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -163,7 +172,7 @@
                     "id": "5ee2378c-1e71-4af2-a827-277d73516a50",
                     "path": "<Pointer>/delta",
                     "interactions": "",
-                    "processors": "ScaleVector2(x=0.05,y=0.05)",
+                    "processors": "",
                     "groups": "Keyboard",
                     "action": "ScaledLook",
                     "isComposite": false,
@@ -254,6 +263,28 @@
                     "processors": "",
                     "groups": "Controller",
                     "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e511ca0e-9576-4060-beee-6b8feb6d29fa",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "MainMenuInput",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "094757ee-c868-4ec3-b85f-6ca52b6978b9",
+                    "path": "<Gamepad>/rightStickPress",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Controller",
+                    "action": "MainMenuInput",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

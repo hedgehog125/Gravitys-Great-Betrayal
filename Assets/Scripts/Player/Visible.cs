@@ -60,7 +60,12 @@ namespace Player {
 						Vector3 snappedRotationChange = targetCamRotateAmount;
 						int previousXAxisID = Util.GetAbsLargestAxis(Gravity.ApplyToDirection(Vector3.forward, directionWas));
 
-						Globals.CurrentCameraController.RotateBy(Mathf.DeltaAngle(targetPresetRotation[previousXAxisID], snappedRotationChange[previousXAxisID]), 0f);
+						if (Globals.CurrentGravityController != null) {
+							Globals.CurrentCameraController.RotateBy(
+								Mathf.DeltaAngle(targetPresetRotation[previousXAxisID], snappedRotationChange[previousXAxisID]),
+								0f
+							);
+						}
 					}
 					transform.rotation = targetAsQuaterion;
 
@@ -71,23 +76,29 @@ namespace Player {
 				}
 				else {
 					if (relativeCamRotateDir == -1) {
-						Vector3[] cameraDirections = {
-							LastDirRemoveY(-cam.transform.right),
-							LastDirRemoveY(cam.transform.right),
-							LastDirRemoveY(cam.transform.forward),
-							LastDirRemoveY(-cam.transform.forward),
-							cam.transform.up
-						};
-
-						relativeCamRotateDir = 0;
-						while (relativeCamRotateDir < cameraDirections.Length) {
-							Vector3Int direction = Util.GetAbsLargestAxisAsVec(cameraDirections[relativeCamRotateDir]);
-
-							if (Gravity.DirectionToID(direction) == targetDirectionID) {
-								break;
-							}
-							relativeCamRotateDir++;
+						if (Globals.CurrentCameraController == null) {
+							relativeCamRotateDir = 5; // Always use the fallback
 						}
+						else {
+							Vector3[] cameraDirections = {
+								LastDirRemoveY(-cam.transform.right),
+								LastDirRemoveY(cam.transform.right),
+								LastDirRemoveY(cam.transform.forward),
+								LastDirRemoveY(-cam.transform.forward),
+								cam.transform.up
+							};
+
+							relativeCamRotateDir = 0;
+							while (relativeCamRotateDir < cameraDirections.Length) {
+								Vector3Int direction = Util.GetAbsLargestAxisAsVec(cameraDirections[relativeCamRotateDir]);
+
+								if (Gravity.DirectionToID(direction) == targetDirectionID) {
+									break;
+								}
+								relativeCamRotateDir++;
+							}
+						}
+						
 
 						if (relativeCamRotateDir != 5) {
 							Vector2Int rotateCameraAxes = new(
