@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   textParts:
   - Use
-  - To Move
-  iconIDs: 00000000
+  - To Move and
+  - To Look
+  iconIDs: 0000000001000000070000000800000007000000080000000e0000000f0000001500000016000000

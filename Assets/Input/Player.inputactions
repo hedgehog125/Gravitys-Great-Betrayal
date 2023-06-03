@@ -140,7 +140,7 @@
                     "path": "<Gamepad>/leftStick",
                     "interactions": "",
                     "processors": "StickDeadzone",
-                    "groups": "Controller",
+                    "groups": "Controller;Switch;Xbox;PS5",
                     "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -162,7 +162,7 @@
                     "path": "<Gamepad>/buttonSouth",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Controller",
+                    "groups": "Controller;Switch;PS5;Xbox",
                     "action": "Jump",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -195,7 +195,7 @@
                     "path": "<Gamepad>/rightTrigger",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Controller",
+                    "groups": "Controller;PS5;Xbox;Switch",
                     "action": "SwitchGravity",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -206,7 +206,7 @@
                     "path": "<Gamepad>/rightStick",
                     "interactions": "",
                     "processors": "StickDeadzone",
-                    "groups": "Controller",
+                    "groups": "Controller;Switch;PS5;Xbox",
                     "action": "UnscaledLook",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -239,7 +239,7 @@
                     "path": "<Gamepad>/dpad/up",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Controller",
+                    "groups": "Controller;Switch;PS5;Xbox",
                     "action": "SwitchGravityUp",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -261,7 +261,7 @@
                     "path": "<Gamepad>/start",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Controller",
+                    "groups": "Controller;Switch;PS5;Xbox",
                     "action": "Pause",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -283,7 +283,7 @@
                     "path": "<Gamepad>/rightStickPress",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Controller",
+                    "groups": "Controller;Switch;PS5;Xbox",
                     "action": "MainMenuInput",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -314,6 +314,39 @@
             "devices": [
                 {
                     "devicePath": "<Gamepad>",
+                    "isOptional": false,
+                    "isOR": false
+                }
+            ]
+        },
+        {
+            "name": "Xbox",
+            "bindingGroup": "Xbox",
+            "devices": [
+                {
+                    "devicePath": "<XInputController>",
+                    "isOptional": false,
+                    "isOR": false
+                }
+            ]
+        },
+        {
+            "name": "PS5",
+            "bindingGroup": "PS5",
+            "devices": [
+                {
+                    "devicePath": "<DualShockGamepad>",
+                    "isOptional": false,
+                    "isOR": false
+                }
+            ]
+        },
+        {
+            "name": "Switch",
+            "bindingGroup": "Switch",
+            "devices": [
+                {
+                    "devicePath": "<SwitchProControllerHID>",
                     "isOptional": false,
                     "isOR": false
                 }
