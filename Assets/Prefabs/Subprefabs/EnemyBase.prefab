@@ -54,6 +54,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_moveData: {fileID: 11400000, guid: 385651e42b96d6440804035fdb3237ac, type: 2}
   m_rangeCollider: {fileID: 2235576590018384188}
+  m_visibleController: {fileID: 8058217035270918467}
 --- !u!114 &6520789971182340078
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -68,6 +69,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_damage: 1
   m_includeNonPlayers: 0
+  m_softRespawn: 0
 --- !u!114 &2898658007593370084
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -83,8 +85,10 @@ MonoBehaviour:
   m_startHealth: 1
   m_maxHealth: 1
   m_invulnerabilityTime: 50
+  m_safeTime: 10
   m_onDeath: 1
   RespawnLocation: {x: 0, y: 0, z: 0}
+  SoftRespawnLocation: {x: 0, y: 0, z: 0}
 --- !u!54 &2499470756399686384
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -199,6 +203,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7999174238458498418}
+  - component: {fileID: 8058217035270918467}
   m_Layer: 0
   m_Name: Visible
   m_TagString: Untagged
@@ -221,3 +226,18 @@ Transform:
   m_Father: {fileID: 2235576589447575346}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8058217035270918467
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5498732760956657448}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9f8ba9bd29404d429a5eb9545c527d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_gravityEffector: {fileID: 7406232772837052531}
+  m_modelRoot: {fileID: 0}
+  LookAngle: 0

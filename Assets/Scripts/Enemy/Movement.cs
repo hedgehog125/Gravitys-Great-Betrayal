@@ -13,6 +13,7 @@ namespace Enemy {
 
 		[SerializeField] private MovementData m_moveData;
 		[SerializeField] private Collider m_rangeCollider;
+		[SerializeField] private Visible m_visibleController;
 
 		private Rigidbody rb;
 		private Collider col;
@@ -145,6 +146,7 @@ namespace Enemy {
 
 			currentTurnAmount = Util.GetHorizontalTurnAmount(vel, adjustedDirection);
 			rb.velocity = gravityController.Apply(vel, gravityEffector.InPlayerGravity);
+			m_visibleController.LookAngle = Util.GetLookAngle(adjustedDirection, gravityController.GetEffectiveDirection(gravityEffector));
 
 			return true;
 		}

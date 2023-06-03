@@ -1,3 +1,4 @@
+using PhysicsTools;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -102,6 +103,11 @@ namespace Player {
 
 		public static int DirectionToID(Vector3Int direction) {
 			return DIRECTIONS_TO_IDs[direction];
+		}
+
+		public int GetEffectiveDirection(GravityEffector gravityEffector) {
+			if (gravityEffector.InPlayerGravity) return Direction;
+			else return 0;
 		}
 		#endregion
 

@@ -78,6 +78,13 @@ public static class Util {
 		angle %= 360;
 		return angle > 180? angle - 360 : angle < -180? angle + 360 : angle;
 	}
+	public static float GetLookAngle(Vector3 moveDirection, int gravityDirection) {
+		float lookAngle = Vector3.SignedAngle(Vector3.forward, moveDirection, Vector3.up);
+		if (gravityDirection == 5) lookAngle += 180;
+		// ^ Already spent an hour trying to fix this properly, so a bodge will have to do for now
+
+		return lookAngle;
+	}
 
 	public static void InsertAtStartAndShift<T>(T value, T[] arr) {
 		T last = value;

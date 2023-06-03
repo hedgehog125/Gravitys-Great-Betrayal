@@ -151,9 +151,7 @@ namespace Player {
 			return false;
 		}
 		private void SetVisibleLookAngle(Vector3 moveDirection) {
-			player.VisibleController.LookAngle = Vector3.SignedAngle(ADJUSTED_FORWARD, moveDirection, ADJUSTED_UP);
-			if (Globals.CurrentGravityController.Direction == 5) player.VisibleController.LookAngle += 180;
-			// ^ Already spent an hour trying to fix this properly, so a bodge will have to do for now
+			player.VisibleController.LookAngle = Util.GetLookAngle(moveDirection, Globals.CurrentGravityController.Direction);
 		}
 		private void CoyoteTick(bool onGround) {
 			if (onGround) {
