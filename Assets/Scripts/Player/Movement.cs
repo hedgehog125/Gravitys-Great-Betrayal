@@ -2,6 +2,7 @@ using PhysicsTools;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 namespace Player { 
@@ -11,6 +12,12 @@ namespace Player {
 
 
 		[SerializeField] private MovementData m_moveData;
+
+
+		[HideInInspector] public bool IsGrounded;
+		[HideInInspector] public float CurrentSpeed;
+		[HideInInspector] public MovementData MovementData { get => m_moveData; }
+		private readonly UnityEvent jumpEvent = new();
 
 
 		private Vector2 moveInput;
@@ -96,6 +103,8 @@ namespace Player {
 				healthController.SoftRespawnLocation = transform.position;
 				Util.InsertAtStartAndShift(Globals.CurrentGravityController.Direction, gravityHistoryWhileSafe);
 			}
+			IsGrounded = onGround;
+			CurrentSpeed = vel.magnitude;
 		}
 
 
@@ -194,6 +203,7 @@ namespace Player {
 						coyoteTick = -1;
 
 						ActiveJumpTick(ref vel);
+						jumpEvent.Invoke();
 					}
 					else if (jumpInput) {
 						if ((nearGround || (! canMidairJump)) && vel.y < m_moveData.maxJumpBufferVelocity) {
@@ -218,6 +228,7 @@ namespace Player {
 							midairJumpCount++;
 							jumpBufferTick = -1;
 							// jumpHoldTick doesn't need to be reset as it'll be -1 here anyway and can't be restarted
+							jumpEvent.Invoke();
 						}
 					}
 					jumpInput = false;
@@ -332,10 +343,18 @@ namespace Player {
 			Util.InsertAtStartAndShift(currentSpeed, speedHistory);
 		}
 
+
+
+		// Public methods
 		public void ResetFacingDirection() {
 			facingDirection = ADJUSTED_FORWARD;
 			SetVisibleLookAngle(ADJUSTED_FORWARD);
 		}
+
+		public void ListenForJump(UnityAction callback) {
+			jumpEvent.AddListener(callback);
+		}
+
 
 		#region Tests
 		#if UNITY_EDITOR

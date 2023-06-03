@@ -87,6 +87,9 @@ public static class Util {
 			last = was;
 		}
 	}
+	public static T GetRandomItem<T>(List<T> list) {
+		return list[Random.Range(0, list.Count)];
+	}
 
 	public class GroundDetector {
 		private const float OFFSET = 0.025f;

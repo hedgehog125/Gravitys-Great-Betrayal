@@ -112,6 +112,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_moveData: {fileID: 11400000, guid: 4bb2d10e396fef442a3072506371b17e, type: 2}
+  IsGrounded: 0
+  CurrentSpeed: 0
 --- !u!114 &1864248190455188301
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -158,8 +160,10 @@ MonoBehaviour:
   m_startHealth: 3
   m_maxHealth: 3
   m_invulnerabilityTime: 75
+  m_safeTime: 10
   m_onDeath: 2
   RespawnLocation: {x: 0, y: 0, z: 0}
+  SoftRespawnLocation: {x: 0, y: 0, z: 0}
 --- !u!114 &1864248190455188299
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -320,6 +324,33 @@ MonoBehaviour:
   m_modelRoot: {fileID: 5380693056521542060}
   rotateTime: 0.5
   LookAngle: 0
+--- !u!114 &4064359253611023519
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1864248191466291007}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e0677ee873b6254c9f8b0410622c391, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_movementController: {fileID: 1864248190455188298}
+  m_soundData: {fileID: 11400000, guid: e5e6d27f1a950314ba104017615c8deb, type: 2}
+--- !u!114 &1242178873128141930
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1864248191466291007}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c64a176b2cebf4447895b61ab500154d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_maxSources: 10
 --- !u!4 &5380693056521542060 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7133407596594802463, guid: 6333b8b1d863baa4ab57642052581d29,
