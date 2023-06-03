@@ -11,6 +11,7 @@ public static class Globals {
 	public static ConstantData CurrentConstants;
 	public static PauseController CurrentPauseController;
 	public static CameraController CurrentCameraController;
+	public static UI.UI CurrentUIController;
 
 	public static PlayerConfig CurrentConfig;
 }
