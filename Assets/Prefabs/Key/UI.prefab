@@ -313,7 +313,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f6fc9a71a6176f40a1dec97b3855915, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_showTime: 150
+  m_showTime: 100
+  m_animationDuration: 25
 --- !u!222 &8146123347062420857
 CanvasRenderer:
   m_ObjectHideFlags: 0

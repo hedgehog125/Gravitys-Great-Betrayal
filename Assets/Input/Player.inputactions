@@ -228,7 +228,7 @@
                     "path": "<Gamepad>/rightShoulder",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Controller",
+                    "groups": "Controller;Xbox;PS5;Switch",
                     "action": "SwitchGravityUp",
                     "isComposite": false,
                     "isPartOfComposite": false

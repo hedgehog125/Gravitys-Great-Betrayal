@@ -6,10 +6,14 @@ using UnityEngine;
 namespace UI {
 	public class ButtonPrompts : MonoBehaviour {
 		[SerializeField] private int m_showTime;
+		[SerializeField] private int m_animationDuration;
 
 		private int showTick = -1;
+		private int hideAnimationTick = -1;
 		private ButtonPromptData currentPrompt;
+		private ButtonPromptData queuedPrompt;
 		private bool needsRerender;
+		private bool isChangingPrompt;
 
 		private void OnControlSchemeChange() {
 			Render();
@@ -26,16 +30,35 @@ namespace UI {
 		}
 
 		private void FixedUpdate() {
-			if (showTick != -1) {
-				if (needsRerender) {
-					Render();
-					needsRerender = false;
+			if (showTick == -1) {
+				if (hideAnimationTick == m_animationDuration) {
+					hideAnimationTick = -1;
+				}
+				else {
+					hideAnimationTick++;
+				}
+
+				if (hideAnimationTick == -1) {
+					isChangingPrompt = false;
+
+					currentPrompt = queuedPrompt;
+					queuedPrompt = null;
+				}
+			}
+			else {
+				if (!isChangingPrompt) {
+					if (needsRerender) {
+						Render();
+						needsRerender = false;
+					}
 				}
 
 				if (showTick == m_showTime) {
 					anim.SetBool("Show", false);
 					showTick = -1;
 					currentPrompt = null;
+
+					hideAnimationTick = 0;
 				}
 				else {
 					showTick++;
@@ -47,7 +70,6 @@ namespace UI {
 			if (showTick == -1) return;
 
 			int controlSchemeID = Globals.CurrentPlayer.ControlSchemeID;
-			Debug.Log(controlSchemeID);
 			string displayText = "";
 			for (int i = 0; i < currentPrompt.textParts.Count; i++) {
 				displayText += currentPrompt.textParts[i];
@@ -64,10 +86,18 @@ namespace UI {
 		}
 
 		public void Display(ButtonPromptData prompt) {
-			showTick = 0;
-			if (currentPrompt != prompt) {
+			if (! isChangingPrompt) showTick = 0;
+			if (currentPrompt != prompt && queuedPrompt != prompt) {
+				if (currentPrompt == null) {
+					currentPrompt = prompt;
+				}
+				else {
+					showTick = m_showTime;
+					isChangingPrompt = true;
+
+					queuedPrompt = prompt;
+				}
 				needsRerender = true;
-				currentPrompt = prompt;
 			}
 		}
 	}
