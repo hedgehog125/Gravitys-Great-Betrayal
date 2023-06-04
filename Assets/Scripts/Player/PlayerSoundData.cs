@@ -16,6 +16,12 @@ namespace Player {
 		[Header("Jumping")]
 		public List<SoundData> jumpSounds;
 
+		[Header("Falling")]
+		public SoundData fallSound;
+		public float maxFallSoundVolume;
+		public float minFallSpeed;
+		public int minFallTime;
+
 		[Header("Landing")]
 		public List<SoundData> landSounds;
 		public int landSoundCooldown;
@@ -23,5 +29,8 @@ namespace Player {
 		public float maxLandVolume;
 		public float minRelativeLandSpeed;
 		public float speedForMaxLandSound;
+
+		[Header("Gravity")]
+		public SoundData gravityChangeSound;
 	}
 }

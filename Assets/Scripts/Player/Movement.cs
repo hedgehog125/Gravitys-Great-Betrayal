@@ -49,6 +49,7 @@ namespace Player {
 
 		private readonly UnityEvent jumpEvent = new();
 		private readonly UnityEvent landEvent = new();
+		private readonly UnityEvent gravityChangeEvent = new();
 
 		private Util.GroundDetector groundDetector;
 		private bool wasOnGround = true;
@@ -359,6 +360,8 @@ namespace Player {
 						gravitySwitchFloatTick = 0;
 						midairGravitySwitchCount++;
 						midairJumpCount = 0;
+
+						gravityChangeEvent.Invoke();
 					}
 				}
 			}
@@ -394,6 +397,9 @@ namespace Player {
 		}
 		public void ListenForLand(UnityAction callback) {
 			landEvent.AddListener(callback);
+		}
+		public void ListenForGravityChangesByMe(UnityAction callback) {
+			gravityChangeEvent.AddListener(callback);
 		}
 
 

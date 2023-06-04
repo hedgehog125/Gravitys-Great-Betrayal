@@ -13,6 +13,9 @@ namespace Player {
 		private SoundData lastGroundedJumpSound;
 		private int landCooldownTick = -1; // Prevents the sound from playing multiple times
 
+		private int fallTick;
+		private AudioSource fallSource;
+
 		private void OnJump() {
 			SoundData sound;
 			if (m_movementController.IsDoubleJump) {
@@ -43,10 +46,11 @@ namespace Player {
 					}
 					landCooldownTick = 0;
 				}
-				else {
-					Debug.Log(m_movementController.LandSpeed);
-				}
 			}
+		}
+
+		private void OnGravityChangedByPlayer() {
+			snd.Play(m_soundData.gravityChangeSound);
 		}
 
 		private SoundPlayer snd;
@@ -57,6 +61,7 @@ namespace Player {
 		private void Start() {
 			m_movementController.ListenForJump(OnJump);
 			m_movementController.ListenForLand(OnLand);
+			m_movementController.ListenForGravityChangesByMe(OnGravityChangedByPlayer);
 		}
 
 		private void FixedUpdate() {
@@ -94,6 +99,31 @@ namespace Player {
 			}
 			else {
 				walkSoundTick = 0f;
+			}
+
+			float currentFallVel = -m_movementController.AdjustedVelocity.y;
+			if (m_movementController.IsGrounded || currentFallVel < m_soundData.minFallSpeed) {
+				if (fallSource != null) {
+					fallSource.Stop();
+					fallSource = null;
+					fallTick = 0;
+				}
+			}
+			else {
+				if (fallTick == m_soundData.minFallTime) {
+					float volume = (currentFallVel - m_soundData.minFallSpeed) / (m_soundData.speedForMaxLandSound - m_soundData.minFallSpeed);
+					volume = Mathf.Min(volume, 1f) * m_soundData.maxFallSoundVolume;
+
+					if (fallSource == null) {
+						fallSource = snd.Play(m_soundData.fallSound, true);
+						fallSource.volume = volume;
+						fallSource.Play();
+					}
+					fallSource.volume = volume;
+				}
+				else {
+					fallTick++;
+				}
 			}
 		}
 	}

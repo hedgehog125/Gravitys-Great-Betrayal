@@ -2,6 +2,10 @@
 Button prompts: https://thoseawesomeguys.com/prompts/ by Nicolae (XELU) Berbece and Paul Paun under CC0
 GravityEffector editor script icon based on: https://pictogrammers.com/library/mdi/icon/arrow-all/ by Austin Andrews under Apache 2.0
 
+= SFX =
+Gravity change sound (trimmed by me): https://freesound.org/people/ProjectsU012/sounds/341024/ by ProjectsU012 under CC BY 4.0
+Wind, trimmed and fades added: https://freesound.org/people/Josethehedgehog/sounds/390380/ by Josethehedgehog under CC0
+
 = Code =
 CustomCameraUp is based on: https://forum.unity.com/threads/lookat-center-delay-when-camera-activates.696977/#post-4663325 by Gregoryl
 WrapAngle function is from https://stackoverflow.com/questions/47680017/how-to-limit-angles-in-180-180-range-just-like-unity3d-inspector by Tomasz Juszczak
