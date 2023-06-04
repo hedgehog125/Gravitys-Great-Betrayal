@@ -24,7 +24,12 @@ public class StaticGameObject : MonoBehaviour {
 		if (GetComponent<Renderer>() == null) {
 			for (int i = 0; i < transform.childCount; i++) {
 				Transform child = transform.GetChild(i);
-				if (child.GetComponent<StaticGameObject>() == null) child.AddComponent<StaticGameObject>();
+				if (child.GetComponent<StaticGameObject>() != null) continue;
+				if (child.TryGetComponent<Rigidbody>(out var childRb)) {
+					if (! childRb.isKinematic) continue;
+				}
+
+				child.AddComponent<StaticGameObject>();
 			}
 
 			DestroyImmediate(this);

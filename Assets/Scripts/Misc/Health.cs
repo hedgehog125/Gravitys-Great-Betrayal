@@ -88,15 +88,17 @@ public class Health : MonoBehaviour {
 				invulnerabilityTick = 0;
 				IsInvulnerable = true;
 
-				if (softRespawn) {
-					transform.position = safeRespawnHistory[^1];
-					rb.velocity = Vector3.zero;
-
-					softRespawnEvent.Invoke();
-				}
+				if (softRespawn) SoftRespawn();
 			}
 			else Die();
 		}
+	}
+
+	public void SoftRespawn() {
+		transform.position = safeRespawnHistory[^1];
+		rb.velocity = Vector3.zero;
+
+		softRespawnEvent.Invoke();
 	}
 	private void Die() {
 		deathEvent.Invoke();

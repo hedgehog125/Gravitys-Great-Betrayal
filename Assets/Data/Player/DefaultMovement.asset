@@ -40,3 +40,4 @@ MonoBehaviour:
   doubleJumpAdditiveMultiplier: 0.9
   doubleJumpSubtractiveMultiplier: 0.25
   topDownThreshold: 0.1
+  stuckTime: 150

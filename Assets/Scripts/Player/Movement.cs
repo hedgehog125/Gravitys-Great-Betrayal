@@ -44,6 +44,8 @@ namespace Player {
 		}
 
 		private Util.GroundDetector groundDetector;
+		private int stuckTick;
+
 		private int jumpBufferTick = -1;
 		private int jumpBufferHoldTick = -1; // Records how long jump was held in midair
 		private bool bufferedJumpInput; // Like jumpInput but it's not set to false when a jump is first buffered or when a jump is started
@@ -96,6 +98,7 @@ namespace Player {
 			VelocityTick(ref vel, onGround, inputIsNeutral);
 
 			rb.velocity = Globals.CurrentGravityController.Apply(vel);
+			StuckTick(vel, onGround);
 			GravityTick(onGround);
 
 			frictionEffector.Tick(onGround);
@@ -259,6 +262,22 @@ namespace Player {
 			if (inputIsNeutral) {
 				float multiplier = onGround? m_moveData.neutralSpeedMultiplier : m_moveData.airNeutralSpeedMultiplier;
 				vel = Util.MultiplyXZMagnitude(vel, multiplier);
+			}
+		}
+		private void StuckTick(Vector3 vel, bool onGround) {
+			bool isStuck = vel.y > -0.05f && (! onGround);
+
+			if (isStuck) {
+				if (stuckTick == m_moveData.stuckTime) {
+					healthController.SoftRespawn();
+					stuckTick = 0;
+				}
+				else {
+					stuckTick++;
+				}
+			}
+			else {
+				stuckTick = 0;
 			}
 		}
 

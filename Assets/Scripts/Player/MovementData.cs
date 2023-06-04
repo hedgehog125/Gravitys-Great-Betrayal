@@ -49,5 +49,6 @@ namespace Player {
 
 		[Header("Misc")]
 		public float topDownThreshold;
+		public int stuckTime;
 	}
 }
