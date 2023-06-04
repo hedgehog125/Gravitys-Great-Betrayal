@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Jump1
   m_EditorClassIdentifier: 
   clip: {fileID: 8300000, guid: fee24da3714d7ff44b718ab537478a67, type: 3}
-  volume: 1
+  volume: 0.6
   priority: 150
   loop: 0

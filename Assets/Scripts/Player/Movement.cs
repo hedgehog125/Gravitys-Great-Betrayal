@@ -1,6 +1,7 @@
 using PhysicsTools;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -14,10 +15,13 @@ namespace Player {
 		[SerializeField] private MovementData m_moveData;
 
 
-		[HideInInspector] public bool IsGrounded;
-		[HideInInspector] public float CurrentSpeed;
+
+		[HideInInspector] public bool IsGrounded { get; private set; }
+		[HideInInspector] public float CurrentSpeed { get; private set; }
+		[HideInInspector] public Vector3 AdjustedVelocity { get; private set; }
+		[HideInInspector] public float LandSpeed { get; private set; }
 		[HideInInspector] public MovementData MovementData { get => m_moveData; }
-		private readonly UnityEvent jumpEvent = new();
+		[HideInInspector] public bool IsDoubleJump { get; private set; }
 
 
 		private Vector2 moveInput;
@@ -43,7 +47,11 @@ namespace Player {
 			Globals.CurrentGravityController.ChangeDirection(gravityHistoryWhileSafe[^1]);
 		}
 
+		private readonly UnityEvent jumpEvent = new();
+		private readonly UnityEvent landEvent = new();
+
 		private Util.GroundDetector groundDetector;
+		private bool wasOnGround = true;
 		private int stuckTick;
 
 		private int jumpBufferTick = -1;
@@ -61,6 +69,7 @@ namespace Player {
 		private int gravitySwitchCooldownTick = -1;
 		private int gravitySwitchFloatTick = -1;
 		private int[] gravityHistoryWhileSafe; // Used for soft respawns
+		private Vector3[] adjustedVelocityHistory;
 
 
 		private Rigidbody rb;
@@ -77,6 +86,7 @@ namespace Player {
 
 			speedHistory = new float[m_moveData.jumpSpeedHistoryOffset];
 			gravityHistoryWhileSafe = new int[healthController.SafeTime];
+			adjustedVelocityHistory = new Vector3[10];
 		}
 		private void Start() {
 			Collider col = GetComponent<Collider>();
@@ -108,6 +118,14 @@ namespace Player {
 			}
 			IsGrounded = onGround;
 			CurrentSpeed = vel.magnitude;
+			AdjustedVelocity = vel;
+			if (onGround != wasOnGround) {
+				if (onGround) {
+					LandSpeed = Mathf.Max(adjustedVelocityHistory.Select(vel => -vel.y).ToArray());
+					landEvent.Invoke();
+				}
+				wasOnGround = onGround;
+			}
 		}
 
 
@@ -202,6 +220,7 @@ namespace Player {
 						jumpBufferTick = -1;
 						jumpBufferHoldTick = -1;
 						coyoteTick = -1;
+						IsDoubleJump = false;
 
 						ActiveJumpTick(ref vel);
 						jumpEvent.Invoke();
@@ -229,6 +248,7 @@ namespace Player {
 							midairJumpCount++;
 							jumpBufferTick = -1;
 							// jumpHoldTick doesn't need to be reset as it'll be -1 here anyway and can't be restarted
+							IsDoubleJump = true;
 							jumpEvent.Invoke();
 						}
 					}
@@ -358,6 +378,7 @@ namespace Player {
 			float currentSpeed = speed2.magnitude;
 
 			Util.InsertAtStartAndShift(currentSpeed, speedHistory);
+			Util.InsertAtStartAndShift(vel, adjustedVelocityHistory);
 		}
 
 
@@ -371,10 +392,13 @@ namespace Player {
 		public void ListenForJump(UnityAction callback) {
 			jumpEvent.AddListener(callback);
 		}
+		public void ListenForLand(UnityAction callback) {
+			landEvent.AddListener(callback);
+		}
 
 
 		#region Tests
-		#if UNITY_EDITOR
+#if UNITY_EDITOR
 		private void Tests() {
 			Debug.Log("Testing");
 

@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 258d8f9a52bbb944cacb6a0a9c3add18, type: 3}
-  m_Name: Jump2
+  m_Name: Land2
   m_EditorClassIdentifier: 
-  clip: {fileID: 8300000, guid: c688952dc06996842b50bf5159770411, type: 3}
-  volume: 0.6
-  priority: 150
+  clip: {fileID: 8300000, guid: 295ae4b063215544e8231af152f2a4de, type: 3}
+  volume: 0.75
+  priority: 160
   loop: 0

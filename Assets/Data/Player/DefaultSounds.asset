@@ -23,4 +23,12 @@ MonoBehaviour:
   jumpSounds:
   - {fileID: 11400000, guid: 5dc2ce496dd842c478a19e9a87df3e8b, type: 2}
   - {fileID: 11400000, guid: c557fa902746b7848ba93a8fa5dcae98, type: 2}
-  - {fileID: 11400000, guid: 87e21910e512bb34d8eef9a2b7594f00, type: 2}
+  landSounds:
+  - {fileID: 11400000, guid: 12e558f8f4ce9f647882238abf109684, type: 2}
+  - {fileID: 11400000, guid: bd41ff147e200de4485869971452c915, type: 2}
+  - {fileID: 11400000, guid: 62cf576a6efd3334fa34875e38f1ef8a, type: 2}
+  landSoundCooldown: 25
+  minLandVelocity: 1
+  maxLandVolume: 0.75
+  minRelativeLandSpeed: 0.1
+  speedForMaxLandSound: 20
