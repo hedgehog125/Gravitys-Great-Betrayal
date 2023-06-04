@@ -2,6 +2,7 @@
 
 using UnityEngine;
 using Cinemachine;
+using System;
 
 /// <summary>
 /// An add-on module for Cinemachine Virtual Camera that overrides Up
@@ -9,7 +10,7 @@ using Cinemachine;
 [SaveDuringPlay]
 [AddComponentMenu("")] // Hide in menu
 public class CustomCameraUp : CinemachineExtension {
-	[HideInInspector] public Vector3 Up = new(0, 1, 0);
+	[NonSerialized] public Vector3 Up = new(0, 1, 0);
 
 	protected override void PostPipelineStageCallback(
 		CinemachineVirtualCameraBase vcam,

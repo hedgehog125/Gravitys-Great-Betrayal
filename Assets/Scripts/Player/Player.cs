@@ -24,6 +24,7 @@ namespace Player {
 		private readonly UnityEvent controlChangeEvent = new();
 
 		[HideInInspector] public Visible VisibleController { get => m_visibleController; }
+		[HideInInspector] public Movement MoveController { get; private set; }
 		[HideInInspector] public Health HealthController { get; private set; }
 		[HideInInspector] public int ControlSchemeID { get; private set; }
 
@@ -54,16 +55,15 @@ namespace Player {
 		}
 
 		private void OnDeath() {
-			moveController.ResetFacingDirection();
+			MoveController.ResetFacingDirection();
 			Globals.CurrentGravityController.ChangeDirection(0);
 		}
 
 
-		private Movement moveController;
 		private PlayerInput playerInput;
 		private void Awake() {
 			HealthController = GetComponent<Health>();
-			moveController = GetComponent<Movement>();
+			MoveController = GetComponent<Movement>();
 			playerInput = GetComponent<PlayerInput>();
 			Globals.CurrentPlayer = this;
 

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -24,8 +25,8 @@ public class Health : MonoBehaviour {
 	[HideInInspector] public bool IsAlive { get; private set; }
 	[HideInInspector] public bool IsInvulnerable { get; private set; }
 	[HideInInspector] public bool IsSafe { get; private set; } = true;
-	[HideInInspector] public Vector3 RespawnLocation;
-	[HideInInspector] public Vector3 SoftRespawnLocation;
+	[NonSerialized] public Vector3 RespawnLocation;
+	[NonSerialized] public Vector3 SoftRespawnLocation;
 
 
 	private Rigidbody rb;

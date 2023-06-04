@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   textParts:
   - Press
-  - To Flip Gravity Up/Down
+  - to Flip Gravity Up/Down
   iconIDs: 030000000a0000000a0000001100000018000000

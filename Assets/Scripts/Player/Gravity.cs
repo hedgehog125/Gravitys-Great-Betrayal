@@ -28,7 +28,7 @@ namespace Player {
 			new(-90, 0, 0),
 			new(90, 0, 0)
 		};
-		[HideInInspector] public static readonly float AmountPerTick = Physics.gravity.y / 50; // Negative
+		[NonSerialized] public static readonly float AmountPerTick = Physics.gravity.y / 50; // Negative
 
 		[HideInInspector] public LayerMask Layer { get; private set; }
 		[HideInInspector] public Vector3 AccelerationPerTick { get; private set; }

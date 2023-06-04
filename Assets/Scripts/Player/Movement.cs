@@ -1,4 +1,5 @@
 using PhysicsTools;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,6 +23,9 @@ namespace Player {
 		[HideInInspector] public float LandSpeed { get; private set; }
 		[HideInInspector] public MovementData MovementData { get => m_moveData; }
 		[HideInInspector] public bool IsDoubleJump { get; private set; }
+
+		[NonSerialized] public bool CanUpDownSwitch = true;
+		[NonSerialized] public bool CanPointSwitch = true;
 
 
 		private Vector2 moveInput;
@@ -334,25 +338,29 @@ namespace Player {
 					if (vel.y < 0) vel.y = 0;
 					rb.velocity = gravityController.Apply(vel);
 
-					bool valid = true;
+					bool valid = false;
 					if (switchGravityInput) {
-						Vector3 appliedFacing = gravityController.Apply(facingDirection);
+						if (CanPointSwitch) {
+							Vector3 appliedFacing = gravityController.Apply(facingDirection);
 
-						int largestID = Util.GetAbsLargestAxis(appliedFacing);
-						Vector3Int axisDirection = Vector3Int.zero;
-						axisDirection[largestID] = appliedFacing[largestID] > 0? 1 : -1;
+							int largestID = Util.GetAbsLargestAxis(appliedFacing);
+							Vector3Int axisDirection = Vector3Int.zero;
+							axisDirection[largestID] = appliedFacing[largestID] > 0? 1 : -1;
 
-						int newDirectionID = Gravity.DirectionToID(axisDirection);
-						if (newDirectionID != gravityController.Direction) {
-							gravityController.ChangeDirection(newDirectionID);
-							valid = true;
+							int newDirectionID = Gravity.DirectionToID(axisDirection);
+							if (newDirectionID != gravityController.Direction) {
+								gravityController.ChangeDirection(newDirectionID);
+								valid = true;
+							}
 						}
 					}
 					else {
-						gravityController.ChangeDirection(Gravity.DirectionToID(
-							Util.RoundVector(gravityController.Apply(ADJUSTED_UP))
-						));
-						valid = true;
+						if (CanUpDownSwitch) {
+							gravityController.ChangeDirection(Gravity.DirectionToID(
+								Util.RoundVector(gravityController.Apply(ADJUSTED_UP))
+							));
+							valid = true;
+						}
 					}
 
 					if (valid) {

@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
+using System;
 
 namespace Player {
 	public class Visible : MonoBehaviour {
@@ -20,7 +21,7 @@ namespace Player {
 		[SerializeField] private Transform m_modelRoot;
 		[SerializeField] private float rotateTime; // In seconds
 
-		[HideInInspector] public float LookAngle;
+		[NonSerialized] public float LookAngle;
 
 		private int directionWas;
 		private float currentRotateRatio;

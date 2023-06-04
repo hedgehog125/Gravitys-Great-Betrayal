@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 568ae634ed48aae4fbdd470c06555e03, type: 3}
-  m_Name: SwitchSideways
+  m_Name: Look
   m_EditorClassIdentifier: 
   textParts:
-  - Point at a Wall and Press
-  - to Switch
-  iconIDs: 040000000b0000000b0000001200000019000000
+  - Use
+  - to Look
+  iconIDs: 0100000008000000080000000f00000016000000

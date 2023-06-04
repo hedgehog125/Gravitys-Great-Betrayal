@@ -6,6 +6,10 @@ GravityEffector editor script icon based on: https://pictogrammers.com/library/m
 Gravity change sound (trimmed by me): https://freesound.org/people/ProjectsU012/sounds/341024/ by ProjectsU012 under CC BY 4.0
 Wind, trimmed and fades added: https://freesound.org/people/Josethehedgehog/sounds/390380/ by Josethehedgehog under CC0
 
+= Music =
+Lab music: https://freesound.org/people/ispeakwaves/sounds/411867/ by ispeakwaves under CC BY 4.0
+Unused lab music is based on: https://freesound.org/people/szegvari/sounds/575657/ by szegvari under CC0
+
 = Code =
 CustomCameraUp is based on: https://forum.unity.com/threads/lookat-center-delay-when-camera-activates.696977/#post-4663325 by Gregoryl
 WrapAngle function is from https://stackoverflow.com/questions/47680017/how-to-limit-angles-in-180-180-range-just-like-unity3d-inspector by Tomasz Juszczak

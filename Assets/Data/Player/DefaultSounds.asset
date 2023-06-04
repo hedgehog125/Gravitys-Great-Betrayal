@@ -19,7 +19,7 @@ MonoBehaviour:
   minWalkSpeed: 0.1
   minRelativeSpeed: 0.4
   minStepSoundGap: 0.5
-  maxStepVolume: 0.6
+  maxStepVolume: 0.75
   jumpSounds:
   - {fileID: 11400000, guid: 5dc2ce496dd842c478a19e9a87df3e8b, type: 2}
   - {fileID: 11400000, guid: c557fa902746b7848ba93a8fa5dcae98, type: 2}

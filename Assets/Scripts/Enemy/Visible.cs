@@ -1,5 +1,6 @@
 using PhysicsTools;
 using Player;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,7 +10,7 @@ namespace Enemy {
 		[SerializeField] private GravityEffector m_gravityEffector;
 		[SerializeField] private Transform m_modelRoot;
 
-		[HideInInspector] public float LookAngle;
+		[NonSerialized] public float LookAngle;
 
 		private void FixedUpdate() {
 			transform.eulerAngles = Gravity.Rotations[Globals.CurrentGravityController.GetEffectiveDirection(m_gravityEffector)];
