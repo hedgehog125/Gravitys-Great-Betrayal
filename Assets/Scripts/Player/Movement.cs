@@ -334,11 +334,8 @@ namespace Player {
 			) {
 				if (switchGravityInput || switchGravityUpInput) {
 					Gravity gravityController = Globals.CurrentGravityController;
-					Vector3 vel = gravityController.Adjust(rb.velocity);
-					if (vel.y < 0) vel.y = 0;
-					rb.velocity = gravityController.Apply(vel);
 
-					bool valid = false;
+					int newDirectionID = -1;
 					if (switchGravityInput) {
 						if (CanPointSwitch) {
 							Vector3 appliedFacing = gravityController.Apply(facingDirection);
@@ -347,30 +344,34 @@ namespace Player {
 							Vector3Int axisDirection = Vector3Int.zero;
 							axisDirection[largestID] = appliedFacing[largestID] > 0? 1 : -1;
 
-							int newDirectionID = Gravity.DirectionToID(axisDirection);
-							if (newDirectionID != gravityController.Direction) {
-								gravityController.ChangeDirection(newDirectionID);
-								valid = true;
-							}
+							newDirectionID = Gravity.DirectionToID(axisDirection);
 						}
 					}
 					else {
 						if (CanUpDownSwitch) {
-							gravityController.ChangeDirection(Gravity.DirectionToID(
+							newDirectionID = Gravity.DirectionToID(
 								Util.RoundVector(gravityController.Apply(ADJUSTED_UP))
-							));
-							valid = true;
+							);
 						}
 					}
 
-					if (valid) {
-						gravitySwitchCooldownTick = 0;
-						gravitySwitchFloatTick = 0;
-						midairGravitySwitchCount++;
-						midairJumpCount = 0;
+					if (newDirectionID != -1) {
+						if (newDirectionID != gravityController.Direction) {
+							Vector3 vel = gravityController.Adjust(rb.velocity);
+							if (vel.y < 0) vel.y = 0;
+							rb.velocity = gravityController.Apply(vel);
 
-						gravityChangeEvent.Invoke();
-					}
+							gravityController.ChangeDirection(newDirectionID);
+							
+
+							gravitySwitchCooldownTick = 0;
+							gravitySwitchFloatTick = 0;
+							midairGravitySwitchCount++;
+							midairJumpCount = 0;
+
+							gravityChangeEvent.Invoke();
+						}
+					} 
 				}
 			}
 

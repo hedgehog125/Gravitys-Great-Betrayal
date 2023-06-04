@@ -68,7 +68,7 @@ namespace Player {
 			Globals.CurrentPlayer = this;
 
 			HealthController.ListenForDeath(OnDeath);
-			ControlSchemeChanged();			
+			ControlSchemeChanged();	
 		}
 
 		private void FixedUpdate() {
